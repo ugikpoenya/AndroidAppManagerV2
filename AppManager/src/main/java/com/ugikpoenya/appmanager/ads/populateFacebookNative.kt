@@ -1,4 +1,4 @@
-package com.ugikpoenya.master.ads
+package com.ugikpoenya.appmanager.ads
 
 import android.util.Log
 import android.view.View
@@ -8,7 +8,7 @@ import com.facebook.ads.MediaView
 import com.facebook.ads.MediaViewListener
 import com.facebook.ads.NativeAd
 import com.facebook.ads.NativeAdBase
-import com.ugikpoenya.master.R
+import com.ugikpoenya.appmanager.R
 
 fun populateFacebookNative(nativeAd: NativeAd, adView: View) {
     // Create native UI using the ad metadata.

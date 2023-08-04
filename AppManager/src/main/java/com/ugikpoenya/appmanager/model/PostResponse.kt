@@ -1,4 +1,4 @@
-package com.ugikpoenya.master.model
+package com.ugikpoenya.appmanager.model
 
 import java.io.Serializable
 

@@ -1,4 +1,4 @@
-package com.ugikpoenya.master.model
+package com.ugikpoenya.appmanager.model
 
 class ItemResponse {
     var item: ItemModel = ItemModel()

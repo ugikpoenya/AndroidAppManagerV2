@@ -1,4 +1,4 @@
-package com.ugikpoenya.master
+package com.ugikpoenya.appmanager
 
 import android.app.Dialog
 import android.content.Context
@@ -6,9 +6,9 @@ import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import android.widget.RelativeLayout
-import com.ugikpoenya.master.ads.AdmobManager
-import com.ugikpoenya.master.ads.FacebookManager
-import com.ugikpoenya.master.ads.UnityManager
+import com.ugikpoenya.appmanager.ads.AdmobManager
+import com.ugikpoenya.appmanager.ads.FacebookManager
+import com.ugikpoenya.appmanager.ads.UnityManager
 
 var intervalCounter = 0
 var ORDER_ADMOB: Int = 0

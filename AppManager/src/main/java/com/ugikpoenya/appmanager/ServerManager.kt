@@ -1,4 +1,4 @@
-package com.ugikpoenya.master
+package com.ugikpoenya.appmanager
 
 import android.content.Context
 import android.os.Handler
@@ -7,10 +7,10 @@ import android.util.Log
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import com.ugikpoenya.master.model.ItemModel
-import com.ugikpoenya.master.model.ItemResponse
-import com.ugikpoenya.master.model.PostModel
-import com.ugikpoenya.master.model.PostResponse
+import com.ugikpoenya.appmanager.model.ItemModel
+import com.ugikpoenya.appmanager.model.ItemResponse
+import com.ugikpoenya.appmanager.model.PostModel
+import com.ugikpoenya.appmanager.model.PostResponse
 
 var BASE_URL = ""
 var API_KEY = ""

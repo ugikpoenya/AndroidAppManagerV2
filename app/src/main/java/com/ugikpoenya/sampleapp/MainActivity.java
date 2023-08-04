@@ -6,10 +6,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ugikpoenya.master.AdsManager;
-import com.ugikpoenya.master.AppManager;
-import com.ugikpoenya.master.ServerManager;
-import com.ugikpoenya.master.ads.AdmobManager;
+import com.ugikpoenya.appmanager.AdsManager;
+import com.ugikpoenya.appmanager.AppManager;
+import com.ugikpoenya.appmanager.ServerManager;
+import com.ugikpoenya.appmanager.ads.AdmobManager;
 import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding;
 
 
@@ -35,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
         adsManager.initBanner(this, binding.lyBannerAds, 0, "home");
         adsManager.initNative(this, binding.lyNativeAds, 0, "home");
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new AdmobManager().showOpenAdsAdmob(this);
+    }
+
 
     public void showPrivacyPolicy(View view) {
         appManager.showPrivacyPolicy(this);

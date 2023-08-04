@@ -3,15 +3,12 @@ package com.ugikpoenya.sampleapp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ugikpoenya.master.AdsManager;
-import com.ugikpoenya.master.ServerManager;
-import com.ugikpoenya.master.ads.AdmobManager;
-import com.ugikpoenya.master.ads.FacebookManager;
+import com.ugikpoenya.appmanager.ServerManager;
+import com.ugikpoenya.appmanager.ads.AdmobManager;
+import com.ugikpoenya.appmanager.ads.FacebookManager;
 
 
 @SuppressLint("CustomSplashScreen")

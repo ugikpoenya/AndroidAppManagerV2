@@ -1,4 +1,4 @@
-package com.ugikpoenya.master.ads
+package com.ugikpoenya.appmanager.ads
 
 import android.view.View
 import android.widget.Button
@@ -7,7 +7,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
-import com.ugikpoenya.master.R
+import com.ugikpoenya.appmanager.R
 
 
 fun populateAdmobNative(nativeAd: NativeAd, adView: NativeAdView) {

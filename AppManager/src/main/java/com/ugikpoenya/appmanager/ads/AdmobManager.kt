@@ -1,4 +1,4 @@
-package com.ugikpoenya.master.ads
+package com.ugikpoenya.appmanager.ads
 
 import android.app.Activity
 import android.content.Context
@@ -25,10 +25,10 @@ import com.google.android.ump.ConsentInformation
 import com.google.android.ump.ConsentRequestParameters
 import com.google.android.ump.FormError
 import com.google.android.ump.UserMessagingPlatform
-import com.ugikpoenya.master.AdsManager
-import com.ugikpoenya.master.ITEM_MODEL
-import com.ugikpoenya.master.R
-import com.ugikpoenya.master.intervalCounter
+import com.ugikpoenya.appmanager.AdsManager
+import com.ugikpoenya.appmanager.ITEM_MODEL
+import com.ugikpoenya.appmanager.R
+import com.ugikpoenya.appmanager.intervalCounter
 
 
 var admobInterstitial: InterstitialAd? = null

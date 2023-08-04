@@ -1,4 +1,4 @@
-package com.ugikpoenya.master
+package com.ugikpoenya.appmanager
 
 import android.content.Context
 import android.content.SharedPreferences

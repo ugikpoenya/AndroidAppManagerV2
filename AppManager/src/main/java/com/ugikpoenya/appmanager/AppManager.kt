@@ -1,4 +1,4 @@
-package com.ugikpoenya.master
+package com.ugikpoenya.appmanager
 
 import android.app.Activity
 import android.app.Dialog
@@ -17,7 +17,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.squareup.picasso.Picasso
-import com.ugikpoenya.master.Prefs
 
 var PRIVACY_POLICY_TITLE = "Privacy Policy"
 var PRIVACY_POLICY_ACCEPT = "ACCEPT"

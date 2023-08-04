@@ -1,9 +1,9 @@
-package com.ugikpoenya.master.model
+package com.ugikpoenya.appmanager.model
 
-import com.ugikpoenya.master.DEFAULT_INTERSTITIAL_INTERVAL
-import com.ugikpoenya.master.DEFAULT_NATIVE_INTERVAL
-import com.ugikpoenya.master.DEFAULT_NATIVE_START
-import com.ugikpoenya.master.DEFAULT_PRIORITY
+import com.ugikpoenya.appmanager.DEFAULT_INTERSTITIAL_INTERVAL
+import com.ugikpoenya.appmanager.DEFAULT_NATIVE_INTERVAL
+import com.ugikpoenya.appmanager.DEFAULT_NATIVE_START
+import com.ugikpoenya.appmanager.DEFAULT_PRIORITY
 
 
 class ItemModel {
