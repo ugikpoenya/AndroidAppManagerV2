@@ -128,7 +128,6 @@ class AdmobManager {
                     }
                 })
                 .build()
-            Log.d("LOG", "Admob Native init ")
             val adRequest = AdRequest.Builder().build()
             adLoader.loadAd(adRequest)
         }
