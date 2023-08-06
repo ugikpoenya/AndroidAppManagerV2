@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.RelativeLayout
 import com.ugikpoenya.appmanager.AdsManager
-import com.ugikpoenya.appmanager.ITEM_MODEL
+import com.ugikpoenya.appmanager.Prefs
 import com.unity3d.ads.*
 import com.unity3d.services.banners.BannerErrorInfo
 import com.unity3d.services.banners.BannerView
@@ -13,10 +13,10 @@ import com.unity3d.services.banners.UnityBannerSize
 
 class UnityManager {
     fun initUnityAds(context: Context) {
-        if (ITEM_MODEL.unity_game_id.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.unity_game_id.isEmpty()) {
             Log.d("LOG", "initUnityAds disable")
         } else {
-            if (ITEM_MODEL.unity_test_mode) {
+            if (Prefs(context).ITEM_MODEL.unity_test_mode) {
                 Log.d("LOG", "Init Unity Ads Test Mode ")
             } else {
                 Log.d("LOG", "Init Unity Ads Production ")
@@ -24,8 +24,8 @@ class UnityManager {
 
             UnityAds.initialize(
                 context,
-                ITEM_MODEL.unity_game_id,
-                ITEM_MODEL.unity_test_mode,
+                Prefs(context).ITEM_MODEL.unity_game_id,
+                Prefs(context).ITEM_MODEL.unity_test_mode,
                 object : IUnityAdsInitializationListener {
                     override fun onInitializationComplete() {
                         Log.d("LOG", "onUnityAdsReady onInitializationComplete")
@@ -42,13 +42,13 @@ class UnityManager {
     }
 
     fun initUnityBanner(context: Context, VIEW: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
-        if (ITEM_MODEL.unity_banner.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.unity_banner.isEmpty()) {
             Log.d("LOG", "Unity Banner ID Not Set")
             AdsManager().initBanner(context, VIEW, ORDER, PAGE)
         } else if (VIEW.childCount == 0) {
             Log.d("LOG", "Unity banner init")
             val bannerView =
-                BannerView(context as Activity, ITEM_MODEL.unity_banner, UnityBannerSize.getDynamicSize(context))
+                BannerView(context as Activity, Prefs(context).ITEM_MODEL.unity_banner, UnityBannerSize.getDynamicSize(context))
             bannerView.listener = object : BannerView.IListener {
                 override fun onBannerLeftApplication(p0: BannerView?) {
                     Log.d("LOG", "Unity onBannerLeftApplication ")
@@ -75,16 +75,16 @@ class UnityManager {
 
 
     fun showInterstitialUnity(context: Context, ORDER: Int = 0) {
-        if (ITEM_MODEL.unity_interstitial.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.unity_interstitial.isEmpty()) {
             Log.d("LOG", "Unity Interstitial ID set")
         } else {
             Log.d("LOG", "Init Unity Ads Interstitial ")
-            UnityAds.load(ITEM_MODEL.unity_interstitial, object : IUnityAdsLoadListener {
+            UnityAds.load(Prefs(context).ITEM_MODEL.unity_interstitial, object : IUnityAdsLoadListener {
                 override fun onUnityAdsAdLoaded(p0: String?) {
                     Log.d("LOG", "Interstitial onUnityAdsAdLoaded $p0")
                     UnityAds.show(
                         context as Activity,
-                        ITEM_MODEL.unity_interstitial,
+                        Prefs(context).ITEM_MODEL.unity_interstitial,
                         UnityAdsShowOptions(),
                         object : IUnityAdsShowListener {
                             override fun onUnityAdsShowFailure(
@@ -126,17 +126,17 @@ class UnityManager {
     }
 
     fun showRewardedUnity(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
-        if (ITEM_MODEL.unity_rewarded_ads.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.unity_rewarded_ads.isEmpty()) {
             Log.d("LOG", "Unity RewardedAds ID set")
             AdsManager().showRewardedAds(context, ORDER, function)
         } else {
             Log.d("LOG", "Init Unity Ads RewardedAds ")
-            UnityAds.load(ITEM_MODEL.unity_rewarded_ads, object : IUnityAdsLoadListener {
+            UnityAds.load(Prefs(context).ITEM_MODEL.unity_rewarded_ads, object : IUnityAdsLoadListener {
                 override fun onUnityAdsAdLoaded(p0: String?) {
                     Log.d("LOG", "RewardedAds onUnityAdsAdLoaded $p0")
                     UnityAds.show(
                         context as Activity,
-                        ITEM_MODEL.unity_rewarded_ads,
+                        Prefs(context).ITEM_MODEL.unity_rewarded_ads,
                         UnityAdsShowOptions(),
                         object : IUnityAdsShowListener {
                             override fun onUnityAdsShowFailure(

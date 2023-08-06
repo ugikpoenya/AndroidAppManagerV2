@@ -55,7 +55,7 @@ class AppManager {
         lp.copyFrom(dialog.window?.attributes)
         lp.width = WindowManager.LayoutParams.MATCH_PARENT
 
-        if (ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
+        if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
             dialog.setContentView(R.layout.dialog_privacy_policy)
             lp.height = WindowManager.LayoutParams.WRAP_CONTENT
         } else {
@@ -71,13 +71,13 @@ class AppManager {
         bt_accept.text = PRIVACY_POLICY_ACCEPT
         bt_decline.text = PRIVACY_POLICY_DECLINE
 
-        if (ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
+        if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
             val tv_content = (dialog.findViewById(R.id.tv_content)) as TextView
             tv_content.movementMethod = LinkMovementMethod.getInstance()
             tv_content.text = PRIVACY_POLICY_CONTENT
         } else {
             val webView = (dialog.findViewById(R.id.webView)) as WebView
-            webView.loadUrl(ITEM_MODEL.privacy_policy.toString())
+            webView.loadUrl(Prefs(context).ITEM_MODEL.privacy_policy.toString())
         }
         bt_accept.setOnClickListener {
             Prefs(context).privacy_policy = true
@@ -92,15 +92,15 @@ class AppManager {
     }
 
     fun initDialogRedirect(context: Context) {
-        if (URLUtil.isValidUrl(ITEM_MODEL.redirect_url)) {
-            val uri = Uri.parse(ITEM_MODEL.redirect_url)
+        if (URLUtil.isValidUrl(Prefs(context).ITEM_MODEL.redirect_url)) {
+            val uri = Uri.parse(Prefs(context).ITEM_MODEL.redirect_url)
             val id = uri.getQueryParameter("id")
 
             if (!id.isNullOrEmpty()) {
                 val dialog = Dialog(context)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
                 dialog.setContentView(R.layout.dialog_redirect)
-                if (ITEM_MODEL.redirect_cancelable) dialog.setCancelable(true)
+                if (Prefs(context).ITEM_MODEL.redirect_cancelable) dialog.setCancelable(true)
                 else dialog.setCancelable(false)
 
                 val lp = WindowManager.LayoutParams()
@@ -108,30 +108,30 @@ class AppManager {
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-                if (ITEM_MODEL.redirect_image_url.isNullOrEmpty()) {
+                if (Prefs(context).ITEM_MODEL.redirect_image_url.isNullOrEmpty()) {
                     (dialog.findViewById(R.id.imageView) as ImageView).visibility = GONE
                 } else {
-                    Picasso.get().load(ITEM_MODEL.redirect_image_url).resize(50, 50).centerCrop().into((dialog.findViewById(R.id.imageView) as ImageView))
+                    Picasso.get().load(Prefs(context).ITEM_MODEL.redirect_image_url).resize(50, 50).centerCrop().into((dialog.findViewById(R.id.imageView) as ImageView))
                 }
 
-                (dialog.findViewById(R.id.txtTitle) as TextView).text = ITEM_MODEL.redirect_title
-                (dialog.findViewById(R.id.txtContent) as TextView).text = ITEM_MODEL.redirect_content
+                (dialog.findViewById(R.id.txtTitle) as TextView).text = Prefs(context).ITEM_MODEL.redirect_title
+                (dialog.findViewById(R.id.txtContent) as TextView).text = Prefs(context).ITEM_MODEL.redirect_content
 
                 val btnUpdate = dialog.findViewById(R.id.btnUpdate) as Button
                 val intent = (context as Activity).packageManager.getLaunchIntentForPackage(id)
 
                 if (intent == null) {
-                    btnUpdate.text = ITEM_MODEL.redirect_button
+                    btnUpdate.text = Prefs(context).ITEM_MODEL.redirect_button
                 } else {
                     btnUpdate.text = "Open"
                 }
 
                 (dialog.findViewById(R.id.btnUpdate) as Button).setOnClickListener {
                     if (intent == null) {
-                        Log.d("LOG", "Open URL " + ITEM_MODEL.redirect_url)
+                        Log.d("LOG", "Open URL " + Prefs(context).ITEM_MODEL.redirect_url)
                         context.startActivity(
                             Intent(
-                                Intent.ACTION_VIEW, Uri.parse(ITEM_MODEL.redirect_url)
+                                Intent.ACTION_VIEW, Uri.parse(Prefs(context).ITEM_MODEL.redirect_url)
                             )
                         )
                     } else {
@@ -141,7 +141,7 @@ class AppManager {
                 }
                 (dialog.findViewById(R.id.btnClose) as Button).setOnClickListener {
                     dialog.dismiss()
-                    if (!ITEM_MODEL.redirect_cancelable) {
+                    if (!Prefs(context).ITEM_MODEL.redirect_cancelable) {
                         context.finish()
                     }
                 }
@@ -172,11 +172,11 @@ class AppManager {
 
     fun nextApp(context: Context) {
         val packageName = (context as Activity).packageName
-        if (!URLUtil.isValidUrl(ITEM_MODEL.more_app)) {
-            ITEM_MODEL.more_app = "https://play.google.com/store/apps/details?id=$packageName"
+        if (!URLUtil.isValidUrl(Prefs(context).ITEM_MODEL.more_app)) {
+            Prefs(context).ITEM_MODEL.more_app = "https://play.google.com/store/apps/details?id=$packageName"
         }
-        Log.d("LOG", "Open URL " + ITEM_MODEL.more_app)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(ITEM_MODEL.more_app))
+        Log.d("LOG", "Open URL " + Prefs(context).ITEM_MODEL.more_app)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Prefs(context).ITEM_MODEL.more_app))
         context.startActivity(intent)
     }
 }

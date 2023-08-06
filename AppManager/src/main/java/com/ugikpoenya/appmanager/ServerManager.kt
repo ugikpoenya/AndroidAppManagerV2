@@ -17,20 +17,18 @@ val DEFAULT_NATIVE_INTERVAL = 8
 val DEFAULT_INTERSTITIAL_INTERVAL = 0
 var DEFAULT_PRIORITY = "0,1,2"
 
-var ITEM_MODEL: ItemModel = ItemModel()
-
 class ServerManager {
     fun setBaseUrl(context: Context, base_url: String) {
         Prefs(context).BASE_URL = base_url
     }
 
     fun setApiKey(context: Context, api_key: String) {
-        Prefs(context).API_KEY = api_key;
+        Prefs(context).API_KEY = api_key
     }
 
-    fun getItemModel(): ItemModel {
+    fun getItemModel(context: Context): ItemModel {
         Log.d("LOG", "getItemModel")
-        return ITEM_MODEL
+        return Prefs(context).ITEM_MODEL
     }
 
     fun getItemDelay(context: Context, ms: Long = 0, function: () -> (Unit)) {
@@ -65,7 +63,7 @@ class ServerManager {
                 try {
                     Log.d("LOG", "getItem successfully")
                     val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
-                    ITEM_MODEL = itemResponse.item
+                    Prefs(context).ITEM_MODEL = itemResponse.item
                     function(response)
 
                 } catch (e: Exception) {

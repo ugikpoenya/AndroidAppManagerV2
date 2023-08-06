@@ -20,7 +20,7 @@ import com.facebook.ads.NativeBannerAdView
 import com.facebook.ads.RewardedVideoAd
 import com.facebook.ads.RewardedVideoAdListener
 import com.ugikpoenya.appmanager.AdsManager
-import com.ugikpoenya.appmanager.ITEM_MODEL
+import com.ugikpoenya.appmanager.Prefs
 import com.ugikpoenya.appmanager.R
 import com.ugikpoenya.appmanager.intervalCounter
 
@@ -36,10 +36,10 @@ class FacebookManager {
 
     fun initFacebookAds(context: Context) {
         Log.d("LOG", "Facebook test device " + FACEBOOK_TEST_DEVICE_ID.size)
-        if (ITEM_MODEL.facebook_banner.isEmpty()
-            && ITEM_MODEL.facebook_native.isEmpty()
-            && ITEM_MODEL.facebook_interstitial.isEmpty()
-            && ITEM_MODEL.facebook_rewarded_ads.isEmpty()
+        if (Prefs(context).ITEM_MODEL.facebook_banner.isEmpty()
+            && Prefs(context).ITEM_MODEL.facebook_native.isEmpty()
+            && Prefs(context).ITEM_MODEL.facebook_interstitial.isEmpty()
+            && Prefs(context).ITEM_MODEL.facebook_rewarded_ads.isEmpty()
         ) {
             Log.d("LOG", "initFacebookAds disable")
         } else {
@@ -56,11 +56,11 @@ class FacebookManager {
     }
 
     fun initFacebookBanner(context: Context, VIEW: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
-        if (ITEM_MODEL.facebook_banner.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.facebook_banner.isEmpty()) {
             Log.d("LOG", "Facebook Banner ID Not Set")
             AdsManager().initBanner(context, VIEW, ORDER, PAGE)
         } else if (VIEW.childCount == 0) {
-            val adView = AdView(context, ITEM_MODEL.facebook_banner, AdSize.BANNER_HEIGHT_50)
+            val adView = AdView(context, Prefs(context).ITEM_MODEL.facebook_banner, AdSize.BANNER_HEIGHT_50)
             val loadAdConfig = adView.buildLoadAdConfig()
                 .withAdListener(object : AdListener {
                     override fun onAdClicked(p0: Ad?) {
@@ -88,13 +88,13 @@ class FacebookManager {
     }
 
     fun initFacebookNative(context: Context, VIEW: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
-        if (ITEM_MODEL.facebook_native.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.facebook_native.isEmpty()) {
             Log.d("LOG", "Facebook Native ID not set ")
             AdsManager().initNative(context, VIEW, ORDER, PAGE)
         } else if (VIEW.childCount == 0) {
             val nativeType = when (PAGE) {
-                "home" -> ITEM_MODEL.home_native_view
-                "detail" -> ITEM_MODEL.detail_native_view
+                "home" -> Prefs(context).ITEM_MODEL.home_native_view
+                "detail" -> Prefs(context).ITEM_MODEL.detail_native_view
                 else -> ""
             }
 
@@ -108,11 +108,11 @@ class FacebookManager {
 
 
     fun initFacebookInterstitial(context: Context) {
-        if (ITEM_MODEL.facebook_interstitial.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.facebook_interstitial.isEmpty()) {
             Log.d("LOG", "Facebook Interstitial ID Not Set")
         } else {
             Log.d("LOG", "Init Facebook Interstitial ")
-            facebookInterstitial = InterstitialAd(context, ITEM_MODEL.facebook_interstitial)
+            facebookInterstitial = InterstitialAd(context, Prefs(context).ITEM_MODEL.facebook_interstitial)
             val loadAdConfig = facebookInterstitial?.buildLoadAdConfig()
                 ?.withAdListener(object : InterstitialAdListener {
                     override fun onInterstitialDisplayed(p0: Ad?) {
@@ -149,7 +149,7 @@ class FacebookManager {
     fun showInterstitialFacebook(context: Context, ORDER: Int = 0) {
         if (facebookInterstitial != null && facebookInterstitial!!.isAdLoaded) {
             facebookInterstitial?.show()
-            intervalCounter = ITEM_MODEL.interstitial_interval
+            intervalCounter = Prefs(context).ITEM_MODEL.interstitial_interval
             Log.d("LOG", "Interstitial Facebook Show")
         } else {
             Log.d("LOG", "Interstitial Facebook not loaded")
@@ -158,12 +158,12 @@ class FacebookManager {
     }
 
     fun showRewardedFacebook(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
-        if (ITEM_MODEL.facebook_rewarded_ads.isEmpty()) {
+        if (Prefs(context).ITEM_MODEL.facebook_rewarded_ads.isEmpty()) {
             Log.d("LOG", "Facebook Rewarded ID set")
             AdsManager().showRewardedAds(context, ORDER, function)
         } else {
             Log.d("LOG", "Init Facebook Rewarded ")
-            facebookRewarded = RewardedVideoAd(context, ITEM_MODEL.facebook_rewarded_ads)
+            facebookRewarded = RewardedVideoAd(context, Prefs(context).ITEM_MODEL.facebook_rewarded_ads)
             val rewardedVideoAdListener: RewardedVideoAdListener = object : RewardedVideoAdListener {
                 override fun onError(ad: Ad, error: AdError) {
                     Log.d("LOG", "Facebook Rewarded video ad failed to load: " + error.errorMessage)
@@ -202,7 +202,7 @@ class FacebookManager {
 
 fun initFacebookNativeBanner(context: Context, VIEW: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
     Log.d("LOG", "Facebook Native Banner Init")
-    val mNativeBannerAd = NativeBannerAd(context, ITEM_MODEL.facebook_banner)
+    val mNativeBannerAd = NativeBannerAd(context, Prefs(context).ITEM_MODEL.facebook_banner)
     val loadAdConfig = mNativeBannerAd.buildLoadAdConfig()
         .withAdListener(object : NativeAdListener {
             override fun onAdClicked(p0: Ad?) {
@@ -246,7 +246,7 @@ fun initFacebookNativeMeidum(context: Context, VIEW: RelativeLayout, ORDER: Int 
             VIEW,
             false
         )
-    val nativeAd = NativeAd(context, ITEM_MODEL.facebook_native)
+    val nativeAd = NativeAd(context, Prefs(context).ITEM_MODEL.facebook_native)
     val loadAdConfig = nativeAd.buildLoadAdConfig()
         .withAdListener(object : NativeAdListener {
             override fun onAdClicked(p0: Ad?) {

@@ -18,7 +18,7 @@ var ORDER_UNITY: Int = 2
 class AdsManager {
     fun initAds(context: Context, function: () -> (Unit)) {
         Log.d("LOG", "Ads Manager initAds")
-        if (ITEM_MODEL.admob_gdpr) {
+        if (Prefs(context).ITEM_MODEL.admob_gdpr) {
             AdmobManager().initGdpr(context, function)
         } else {
             AdmobManager().initAdmobAds(context)
@@ -33,8 +33,8 @@ class AdsManager {
         if (view.childCount == 0) {
             Log.d("LOG", "initBanner $ORDER")
             var priority: String? = ""
-            if (PAGE.lowercase() == "home") priority = ITEM_MODEL.home_priority
-            if (PAGE.lowercase() == "detail") priority = ITEM_MODEL.detail_priority
+            if (PAGE.lowercase() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
+            if (PAGE.lowercase() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
             if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
 
             val array = priority.split(",").map { it.toInt() }
@@ -53,8 +53,8 @@ class AdsManager {
         if (view.childCount == 0) {
             Log.d("LOG", "initNative $ORDER")
             var priority: String? = ""
-            if (PAGE.lowercase() == "home") priority = ITEM_MODEL.home_priority
-            if (PAGE.lowercase() == "detail") priority = ITEM_MODEL.detail_priority
+            if (PAGE.lowercase() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
+            if (PAGE.lowercase() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
             if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
 
             val array = priority.split(",").map { it.toInt() }
@@ -71,7 +71,7 @@ class AdsManager {
     fun showInterstitial(context: Context, ORDER: Int = 0) {
         if (intervalCounter <= 0) {
             Log.d("LOG", "Show  Interstitial $ORDER")
-            var priority: String? = ITEM_MODEL.interstitial_priority
+            var priority: String? = Prefs(context).ITEM_MODEL.interstitial_priority
             if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
             val array = priority.split(",").map { it.toInt() }
             if (array.contains(ORDER)) {
@@ -100,7 +100,7 @@ class AdsManager {
         dialog.show()
         dialog.window?.attributes = lp
 
-        var priority: String? = ITEM_MODEL.interstitial_priority
+        var priority: String? = Prefs(context).ITEM_MODEL.interstitial_priority
         if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
         val array = priority.split(",").map { it.toInt() }
         if (array.contains(ORDER)) {
