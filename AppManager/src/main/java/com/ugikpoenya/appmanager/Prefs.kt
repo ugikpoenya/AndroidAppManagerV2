@@ -6,6 +6,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
+import com.ugikpoenya.appmanager.model.PostModel
 import java.lang.Exception
 
 class Prefs(context: Context) {
@@ -38,6 +39,30 @@ class Prefs(context: Context) {
             }
 
         }
+
+    var post_model_array_list: ArrayList<PostModel>
+        get() {
+            return try {
+                val json = prefs.getString("post_model_array_list", "")
+                Gson().fromJson(json, ArrayList<PostModel>()::class.java)
+
+            } catch (e: Exception) {
+                Log.d("LOG", "Error : " + e.message)
+                ArrayList()
+            }
+        }
+        set(value) {
+            try {
+                prefs.edit().putString("post_model_array_list", Gson().toJson(value)).apply()
+            } catch (e: Exception) {
+                Log.d("LOG", "Error : " + e.message)
+            }
+
+        }
+
+    var version_code: Int
+        get() = prefs.getInt("version_code", 0)
+        set(value) = prefs.edit().putInt("version_code", value).apply()
 
     var privacy_policy: Boolean
         get() = prefs.getBoolean("privacy_policy", false)
