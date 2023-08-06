@@ -6,7 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.ugikpoenya.appmanager.model.PostModel
+import androidx.room.Update
 
 
 @Dao
@@ -25,6 +25,9 @@ interface DAO {
     @Query("SELECT * FROM table_posts WHERE id=:id")
     fun getPost(id: Int): TablePosts
 
+    @Query("SELECT * FROM table_posts WHERE post_id=:post_id")
+    fun getPostId(post_id: Int): TablePosts
+
     @get:Query("SELECT COUNT(id) FROM table_posts")
     val getPostsCount: Int
 
@@ -34,6 +37,9 @@ interface DAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPost(tablePosts: TablePosts)
 
+    @Update
+    fun updatePost(vararg tablePost: TablePosts)
+
     @Query("DELETE FROM table_posts")
     fun removeAllPosts()
 
@@ -42,6 +48,9 @@ interface DAO {
 
     @Query("DELETE FROM table_posts WHERE id = :id")
     fun deletePost(id: Int)
+
+    @Query("DELETE FROM table_posts WHERE post_id = :post_id")
+    fun deletePostId(post_id: Int)
 
     @Delete
     fun delete(tablePosts: TablePosts)
