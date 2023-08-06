@@ -21,8 +21,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         ServerManager serverManager = new ServerManager();
-        serverManager.setBaseUrl("https://master.ugikpoenya.net/api/");
-        serverManager.setApiKey("DA8BB129F7C1ED5BD07046961C995A77");
+        serverManager.setBaseUrl(this, "https://master.ugikpoenya.net/api/");
+        serverManager.setApiKey(this, "DA8BB129F7C1ED5BD07046961C995A77");
 
         new AdmobManager().addTestDeviceId("01E84CE45ACAE7D0A79D096213298925");
         new FacebookManager().addTestDeviceId("85546810-d31f-4d61-a1b3-6444f250ca8c");

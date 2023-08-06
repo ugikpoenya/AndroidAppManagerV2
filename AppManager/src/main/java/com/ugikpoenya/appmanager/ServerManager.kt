@@ -12,8 +12,6 @@ import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
 
-var BASE_URL = ""
-var API_KEY = ""
 val DEFAULT_NATIVE_START = 2
 val DEFAULT_NATIVE_INTERVAL = 8
 val DEFAULT_INTERSTITIAL_INTERVAL = 0
@@ -22,12 +20,12 @@ var DEFAULT_PRIORITY = "0,1,2"
 var ITEM_MODEL: ItemModel = ItemModel()
 
 class ServerManager {
-    fun setBaseUrl(base_url: String) {
-        BASE_URL = base_url;
+    fun setBaseUrl(context: Context, base_url: String) {
+        Prefs(context).BASE_URL = base_url
     }
 
-    fun setApiKey(api_key: String) {
-        API_KEY = api_key;
+    fun setApiKey(context: Context, api_key: String) {
+        Prefs(context).API_KEY = api_key;
     }
 
     fun getItemModel(): ItemModel {
@@ -37,6 +35,7 @@ class ServerManager {
 
     fun getItemDelay(context: Context, ms: Long = 0, function: () -> (Unit)) {
         Log.d("LOG", "getItemDelay: " + ms + " ms")
+
 
         var timerResponse = false
         var serverResponse = false
@@ -57,12 +56,12 @@ class ServerManager {
 
 
     fun getItem(context: Context, function: (response: String?) -> (Unit)) {
-        if (BASE_URL.isEmpty()) {
+        if (Prefs(context).BASE_URL.isEmpty()) {
             Log.d("LOG", "Base url not found")
             function(null)
         } else {
             val queue = Volley.newRequestQueue(context)
-            val stringRequest = object : StringRequest(Method.GET, BASE_URL, com.android.volley.Response.Listener { response ->
+            val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL, com.android.volley.Response.Listener { response ->
                 try {
                     Log.d("LOG", "getItem successfully")
                     val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
@@ -81,7 +80,7 @@ class ServerManager {
                 override fun getHeaders(): MutableMap<String, String> {
                     val headers = HashMap<String, String>()
                     headers["package_name"] = context.packageName
-                    headers["api_key"] = API_KEY
+                    headers["api_key"] = Prefs(context).API_KEY
                     return headers
                 }
             }
@@ -91,7 +90,7 @@ class ServerManager {
 
     fun getPosts(context: Context, function: (posts: ArrayList<PostModel>?) -> (Unit)) {
         val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, BASE_URL + "posts", com.android.volley.Response.Listener { response ->
+        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "posts", com.android.volley.Response.Listener { response ->
             try {
                 val postResponse = Gson().fromJson(response, PostResponse::class.java)
                 Log.d("LOG", "getPosts : " + postResponse.data?.size)
@@ -108,7 +107,7 @@ class ServerManager {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["package_name"] = context.packageName
-                headers["api_key"] = API_KEY
+                headers["api_key"] = Prefs(context).API_KEY
                 return headers
             }
         }
@@ -117,7 +116,7 @@ class ServerManager {
 
     fun getAssetFiles(context: Context, function: (files: ArrayList<String>?) -> (Unit)) {
         val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, BASE_URL + "assets", com.android.volley.Response.Listener { response ->
+        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "assets", com.android.volley.Response.Listener { response ->
             try {
                 val postResponse = Gson().fromJson(response, PostResponse::class.java)
                 Log.d("LOG", "getAssetFiles : " + postResponse.files?.size)
@@ -133,7 +132,7 @@ class ServerManager {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["package_name"] = context.packageName
-                headers["api_key"] = API_KEY
+                headers["api_key"] = Prefs(context).API_KEY
                 return headers
             }
         }
@@ -142,7 +141,7 @@ class ServerManager {
 
     fun getAssetFolders(context: Context, function: (folders: Map<String, ArrayList<String>>?) -> (Unit)) {
         val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, BASE_URL + "assets", com.android.volley.Response.Listener { response ->
+        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "assets", com.android.volley.Response.Listener { response ->
             try {
                 val postResponse = Gson().fromJson(response, PostResponse::class.java)
                 Log.d("LOG", "getAssetFolders : " + postResponse.folders?.size)
@@ -159,7 +158,7 @@ class ServerManager {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["package_name"] = context.packageName
-                headers["api_key"] = API_KEY
+                headers["api_key"] = Prefs(context).API_KEY
                 return headers
             }
         }
