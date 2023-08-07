@@ -8,15 +8,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ugikpoenya.appmanager.AdsManager;
 import com.ugikpoenya.appmanager.AppManager;
+import com.ugikpoenya.appmanager.Prefs;
 import com.ugikpoenya.appmanager.ServerManager;
 import com.ugikpoenya.appmanager.ads.AdmobManager;
+import com.ugikpoenya.appmanager.model.PostModel;
 import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     AppManager appManager = new AppManager();
     AdsManager adsManager = new AdsManager();
+
+    Prefs prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         ServerManager serverManager = new ServerManager();
 
-        serverManager.getPosts(this, (response) -> null);
+        prefs = new Prefs(this);
+
+        serverManager.getPosts(this, (response) -> {
+            prefs.setPost_model_array_list(response);
+            for (PostModel p : prefs.getPost_model_array_list()) {
+                Log.d("LOG", p.getPost_title());
+            }
+            return null;
+        });
         serverManager.getAssetFiles(this, (response) -> null);
         serverManager.getAssetFolders(this, (response) -> null);
 

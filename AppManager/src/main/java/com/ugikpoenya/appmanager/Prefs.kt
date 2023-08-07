@@ -4,10 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.ugikpoenya.appmanager.model.ItemModel
-import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
-import java.lang.Exception
 
 class Prefs(context: Context) {
     val prefs: SharedPreferences = context.getSharedPreferences(context.packageName, 0)
@@ -40,12 +39,13 @@ class Prefs(context: Context) {
 
         }
 
-    var post_model_array_list: ArrayList<PostModel>
+    var post_model_array_list: List<PostModel>
         get() {
             return try {
                 val json = prefs.getString("post_model_array_list", "")
-                Gson().fromJson(json, ArrayList<PostModel>()::class.java)
-
+                val gsonBuilder = GsonBuilder().serializeNulls()
+                val gson = gsonBuilder.create()
+                gson.fromJson(json, Array<PostModel>::class.java).toList()
             } catch (e: Exception) {
                 Log.d("LOG", "Error : " + e.message)
                 ArrayList()
