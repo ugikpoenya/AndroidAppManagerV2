@@ -60,6 +60,27 @@ class Prefs(context: Context) {
 
         }
 
+    var serach_array_list: List<String>
+        get() {
+            return try {
+                val json = prefs.getString("serach_array_list", "")
+                val gsonBuilder = GsonBuilder().serializeNulls()
+                val gson = gsonBuilder.create()
+                gson.fromJson(json, Array<String>::class.java).toList()
+            } catch (e: Exception) {
+                Log.d("LOG", "Error : " + e.message)
+                ArrayList()
+            }
+        }
+        set(value) {
+            try {
+                prefs.edit().putString("serach_array_list", Gson().toJson(value)).apply()
+            } catch (e: Exception) {
+                Log.d("LOG", "Error : " + e.message)
+            }
+
+        }
+
     var version_code: Int
         get() = prefs.getInt("version_code", 0)
         set(value) = prefs.edit().putInt("version_code", value).apply()

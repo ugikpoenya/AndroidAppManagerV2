@@ -15,7 +15,7 @@ class PostManager {
 
     fun getPosts(context: Context, filter: String): List<PostModel> {
         return Prefs(context).post_model_array_list
-            .filter { it -> ((it.post_title + " " + it.post_content).lowercase()!!.contains(filter)) }
+            .filter { it -> ((it.post_title + " " + it.post_content).lowercase().contains(filter.lowercase())) }
     }
 
     fun getPostsType(context: Context, post_type: String?): List<PostModel> {
@@ -26,7 +26,7 @@ class PostManager {
     fun getPostsType(context: Context, post_type: String?, filter: String): List<PostModel> {
         return Prefs(context).post_model_array_list
             .filter { it -> (it.post_type == post_type) }
-            .filter { it -> ((it.post_title + " " + it.post_content).lowercase()!!.contains(filter)) }
+            .filter { it -> ((it.post_title + " " + it.post_content).lowercase().contains(filter.lowercase())) }
     }
 
     fun addPost(context: Context, postModel: PostModel, position: Int) {
@@ -46,9 +46,7 @@ class PostManager {
 
     fun updatePost(context: Context, postModel: PostModel): Boolean {
         val posts = ArrayList<PostModel>()
-        Prefs(context).post_model_array_list.forEach {
-            posts.add(it)
-        }
+        posts.addAll(Prefs(context).post_model_array_list)
         val post = posts.find { it.post_id == postModel.post_id && it.post_type == postModel.post_type }
         if (post == null) {
             return false
@@ -66,9 +64,7 @@ class PostManager {
 
     fun deletePost(context: Context, post_id: Int?): Boolean {
         val posts = ArrayList<PostModel>()
-        Prefs(context).post_model_array_list.forEach {
-            posts.add(it)
-        }
+        posts.addAll(Prefs(context).post_model_array_list)
         val post = posts.find { it.post_id == post_id }
         if (post == null) {
             return false
@@ -82,9 +78,7 @@ class PostManager {
 
     fun deletePost(context: Context, post_id: Int?, post_type: String?): Boolean {
         val posts = ArrayList<PostModel>()
-        Prefs(context).post_model_array_list.forEach {
-            posts.add(it)
-        }
+        posts.addAll(Prefs(context).post_model_array_list)
         val post = posts.find { it.post_id == post_id && it.post_type == post_type }
         if (post == null) {
             return false
