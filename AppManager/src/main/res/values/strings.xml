@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="PRIVACY_POLICY_TITLE">Privacy Policy</string>
+    <string name="PRIVACY_POLICY_CONTENT">
+        By using this Application, you agree with Terms of Conditions, Cookie Policy and Privacy Policy and agree to have your personal data, behavior transferred and processed outside the EU.
+    </string>
+    <string name="ACCEPT">ACCEPT</string>
+    <string name="DECLINE">DECLINE</string>
+</resources>

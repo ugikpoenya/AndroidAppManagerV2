@@ -18,28 +18,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import com.squareup.picasso.Picasso
 
-var PRIVACY_POLICY_TITLE = "Privacy Policy"
-var PRIVACY_POLICY_ACCEPT = "ACCEPT"
-var PRIVACY_POLICY_DECLINE = "DECLINE"
-var PRIVACY_POLICY_CONTENT = "By using this Application, you agree with Terms of Conditions, Cookie Policy and Privacy Policy and agree to have your personal data, behavior transferred and processed outside the EU."
-
 
 class AppManager {
-    fun setPrivacyPolicyTitle(value: String) {
-        PRIVACY_POLICY_TITLE = value
-    }
-
-    fun setPrivacyPolicyAccept(value: String) {
-        PRIVACY_POLICY_ACCEPT = value
-    }
-
-    fun setPrivacyPolicyDecline(value: String) {
-        PRIVACY_POLICY_DECLINE = value
-    }
-
-    fun setPrivacyPolicyContent(value: String) {
-        PRIVACY_POLICY_CONTENT = value
-    }
 
     fun initPrivacyPolicy(context: Context) {
         if (!Prefs(context).privacy_policy) {
@@ -67,14 +47,14 @@ class AppManager {
         val bt_accept = (dialog.findViewById(R.id.bt_accept)) as AppCompatButton
         val bt_decline = (dialog.findViewById(R.id.bt_decline)) as AppCompatButton
 
-        tv_title.text = PRIVACY_POLICY_TITLE
-        bt_accept.text = PRIVACY_POLICY_ACCEPT
-        bt_decline.text = PRIVACY_POLICY_DECLINE
+        tv_title.text = context.resources.getString(R.string.PRIVACY_POLICY_TITLE)
+        bt_accept.text = context.resources.getString(R.string.ACCEPT)
+        bt_decline.text = context.resources.getString(R.string.DECLINE)
 
         if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
             val tv_content = (dialog.findViewById(R.id.tv_content)) as TextView
             tv_content.movementMethod = LinkMovementMethod.getInstance()
-            tv_content.text = PRIVACY_POLICY_CONTENT
+            tv_content.text = context.resources.getString(R.string.PRIVACY_POLICY_CONTENT)
         } else {
             val webView = (dialog.findViewById(R.id.webView)) as WebView
             webView.loadUrl(Prefs(context).ITEM_MODEL.privacy_policy.toString())
