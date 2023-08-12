@@ -20,6 +20,28 @@ import com.squareup.picasso.Picasso
 
 
 class AppManager {
+    fun exitApp(context: Context) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window?.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        dialog.setContentView(R.layout.dialog_exit)
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        val btn_yes = (dialog.findViewById(R.id.btn_yes)) as AppCompatButton
+        val btn_no = (dialog.findViewById(R.id.btn_no)) as AppCompatButton
+
+        btn_yes.setOnClickListener {
+            (context as Activity).finish()
+        }
+        btn_no.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+        dialog.window?.attributes = lp
+    }
 
     fun initPrivacyPolicy(context: Context) {
         if (!Prefs(context).privacy_policy) {

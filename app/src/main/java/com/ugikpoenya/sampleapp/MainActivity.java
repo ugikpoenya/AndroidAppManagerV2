@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
         adsManager.initNative(this, binding.lyNativeAds, 0, "home");
     }
 
+
+    @Override
+    public void onBackPressed() {
+        new AppManager().exitApp(this);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();

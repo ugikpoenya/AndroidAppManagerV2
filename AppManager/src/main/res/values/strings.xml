@@ -8,4 +8,9 @@
     <string name="DECLINE">DECLINE</string>
 
     <string name="SHARE_APP_TEXT">Get %1$s application on Google Play Store \n %2$s</string>
+
+    <string name="EXIT_TITLE">Exit App</string>
+    <string name="EXIT_MESSAGE">Are you sure you want to leave the application?</string>
+    <string name="YES">YES</string>
+    <string name="NO">NO</string>
 </resources>

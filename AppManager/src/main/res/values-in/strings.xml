@@ -8,4 +8,9 @@ Dengan menggunakan Aplikasi ini, Anda setuju dengan <a href="#">Persyaratan Kete
     <string name="DECLINE">TOLAK</string>
 
     <string name="SHARE_APP_TEXT">Dapatkan aplikasi %1$s di Google Play Store \n %2$s</string>
+
+    <string name="EXIT_TITLE">Keluar Aplikasi</string>
+    <string name="EXIT_MESSAGE">Anda yakin ingin keluar dari aplikasi?</string>
+    <string name="YES">YA</string>
+    <string name="NO">TIDAK</string>
 </resources>
