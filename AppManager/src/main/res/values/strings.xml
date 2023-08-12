@@ -6,4 +6,6 @@
     </string>
     <string name="ACCEPT">ACCEPT</string>
     <string name="DECLINE">DECLINE</string>
+
+    <string name="SHARE_APP_TEXT">Get %1$s application on Google Play Store \n %2$s</string>
 </resources>

@@ -6,4 +6,6 @@ Dengan menggunakan Aplikasi ini, Anda setuju dengan <a href="#">Persyaratan Kete
     </string>
     <string name="ACCEPT">TERIMA</string>
     <string name="DECLINE">TOLAK</string>
+
+    <string name="SHARE_APP_TEXT">Dapatkan aplikasi %1$s di Google Play Store \n %2$s</string>
 </resources>

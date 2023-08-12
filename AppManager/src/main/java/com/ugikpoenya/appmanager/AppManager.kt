@@ -142,7 +142,8 @@ class AppManager {
     fun shareApp(context: Context, appName: String?) {
         val packageName = (context as Activity).packageName
         val rateUrl = "https://play.google.com/store/apps/details?id=$packageName"
-        val contentShare = "Get $appName application on Google Play \n $rateUrl"
+        val contentShare: String = context.resources.getString(R.string.SHARE_APP_TEXT, appName, rateUrl)
+
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, contentShare)
