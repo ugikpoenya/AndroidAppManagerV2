@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Privacy Policy"
+                android:text="@string/PRIVACY_POLICY_TITLE"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/white" />
 
@@ -41,7 +41,7 @@
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="@string/PRIVACY_POLICY_CONTENT"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#666666" />
 
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:background="#839192"
             android:padding="7dp"
-            android:text="DECLINE"
+            android:text="@string/DECLINE"
             android:textColor="#FFFFFF" />
 
         <Space
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:background="#1E8449"
             android:padding="7dp"
-            android:text="ACCEPT"
+            android:text="@string/ACCEPT"
             android:textColor="#FFFFFF" />
 
     </LinearLayout>

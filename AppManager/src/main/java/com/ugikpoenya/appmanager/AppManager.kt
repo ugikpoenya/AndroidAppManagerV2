@@ -43,21 +43,15 @@ class AppManager {
             lp.height = WindowManager.LayoutParams.MATCH_PARENT
         }
 
-        val tv_title = (dialog.findViewById(R.id.tv_title)) as TextView
         val bt_accept = (dialog.findViewById(R.id.bt_accept)) as AppCompatButton
         val bt_decline = (dialog.findViewById(R.id.bt_decline)) as AppCompatButton
-
-        tv_title.text = context.resources.getString(R.string.PRIVACY_POLICY_TITLE)
-        bt_accept.text = context.resources.getString(R.string.ACCEPT)
-        bt_decline.text = context.resources.getString(R.string.DECLINE)
 
         if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
             val tv_content = (dialog.findViewById(R.id.tv_content)) as TextView
             tv_content.movementMethod = LinkMovementMethod.getInstance()
-            tv_content.text = context.resources.getString(R.string.PRIVACY_POLICY_CONTENT)
         } else {
             val webView = (dialog.findViewById(R.id.webView)) as WebView
-            webView.loadUrl(Prefs(context).ITEM_MODEL.privacy_policy.toString())
+            webView.loadUrl(Prefs(context).ITEM_MODEL.privacy_policy)
         }
         bt_accept.setOnClickListener {
             Prefs(context).privacy_policy = true
