@@ -18,6 +18,10 @@ class Prefs(context: Context) {
         get() = prefs.getString("API_KEY", "").toString()
         set(value) = prefs.edit().putString("API_KEY", value).apply()
 
+    var ITEM_RESPONSE: String
+        get() = prefs.getString("ITEM_RESPONSE", "").toString()
+        set(value) = prefs.edit().putString("ITEM_RESPONSE", value).apply()
+
     var ITEM_MODEL: ItemModel
         get() {
             return try {

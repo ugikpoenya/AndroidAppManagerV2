@@ -11,6 +11,7 @@ import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
+import org.json.JSONObject
 
 val DEFAULT_NATIVE_START = 2
 val DEFAULT_NATIVE_INTERVAL = 8
@@ -44,7 +45,7 @@ class ServerManager {
             }
         }, ms)
 
-        getItem(context) { response: String? ->
+        getItemResponse(context) { response: String? ->
             serverResponse = true
             if (serverResponse && timerResponse) {
                 AdsManager().initAds(context, function)
@@ -52,8 +53,19 @@ class ServerManager {
         }
     }
 
+    fun getItem(context: Context, key: String): String {
+        return try {
+            val jsonObject = JSONObject(Prefs(context).ITEM_RESPONSE)
+            val item = jsonObject.getJSONObject("item")
+            item.getString(key.trim())
+        } catch (e: Exception) {
+            Log.d("LOG", "Error : " + e.message)
+            ""
+        }
+    }
 
-    fun getItem(context: Context, function: (response: String?) -> (Unit)) {
+
+    fun getItemResponse(context: Context, function: (response: String?) -> (Unit)) {
         if (Prefs(context).BASE_URL.isEmpty()) {
             Log.d("LOG", "Base url not found")
             function(null)
@@ -63,6 +75,7 @@ class ServerManager {
                 try {
                     Log.d("LOG", "getItem successfully")
                     val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
+                    Prefs(context).ITEM_RESPONSE = response
                     Prefs(context).ITEM_MODEL = itemResponse.item
                     function(response)
 
