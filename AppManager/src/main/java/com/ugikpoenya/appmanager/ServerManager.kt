@@ -86,21 +86,20 @@ class ServerManager {
         }
     }
 
-    fun getPosts(context: Context, function: (posts: ArrayList<PostModel>?) -> (Unit)) {
+
+    fun getPostResponse(context: Context, url: String, function: (postResponse: PostResponse?) -> (Unit)) {
         val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "posts", com.android.volley.Response.Listener { response ->
+        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + url, com.android.volley.Response.Listener { response ->
             try {
                 val postResponse = Gson().fromJson(response, PostResponse::class.java)
-                Log.d("LOG", "getPosts : " + postResponse.data?.size)
-                function(postResponse.data)
-
+                function(postResponse)
             } catch (e: Exception) {
                 Log.d("LOG", "Error : " + e.message)
-                function(ArrayList())
+                function(null)
             }
         }, com.android.volley.Response.ErrorListener {
             Log.d("LOG", "Error : " + it.message)
-            function(ArrayList())
+            function(null)
         }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -110,56 +109,40 @@ class ServerManager {
             }
         }
         queue.add(stringRequest)
+    }
+
+    fun getPosts(context: Context, function: (posts: ArrayList<PostModel>?) -> (Unit)) {
+        getPostResponse(context, "posts") {
+            Log.d("LOG", "getPosts :  " + it?.data?.size)
+            function(it?.data)
+        }
     }
 
     fun getAssetFiles(context: Context, function: (files: ArrayList<String>?) -> (Unit)) {
-        val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "assets", com.android.volley.Response.Listener { response ->
-            try {
-                val postResponse = Gson().fromJson(response, PostResponse::class.java)
-                Log.d("LOG", "getAssetFiles : " + postResponse.files?.size)
-                function(postResponse.files)
-            } catch (e: Exception) {
-                Log.d("LOG", "Error : " + e.message)
-                function(null)
-            }
-        }, com.android.volley.Response.ErrorListener {
-            Log.d("LOG", "Error : " + it.message)
-            function(null)
-        }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["package_name"] = context.packageName
-                headers["api_key"] = Prefs(context).API_KEY
-                return headers
-            }
+        getPostResponse(context, "assets") {
+            Log.d("LOG", "getAssetFiles :  " + it?.files?.size)
+            function(it?.files)
         }
-        queue.add(stringRequest)
+    }
+
+    fun getAssetFiles(context: Context, folder: String, function: (files: ArrayList<String>?) -> (Unit)) {
+        getPostResponse(context, "assets/$folder") {
+            Log.d("LOG", "getAssetFiles $folder:  " + it?.files?.size)
+            function(it?.files)
+        }
     }
 
     fun getAssetFolders(context: Context, function: (folders: Map<String, ArrayList<String>>?) -> (Unit)) {
-        val queue = Volley.newRequestQueue(context)
-        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "assets", com.android.volley.Response.Listener { response ->
-            try {
-                val postResponse = Gson().fromJson(response, PostResponse::class.java)
-                Log.d("LOG", "getAssetFolders : " + postResponse.folders?.size)
-                function(postResponse.folders)
-
-            } catch (e: Exception) {
-                Log.d("LOG", "Error : " + e.message)
-                function(null)
-            }
-        }, com.android.volley.Response.ErrorListener {
-            Log.d("LOG", "Error : " + it.message)
-            function(null)
-        }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["package_name"] = context.packageName
-                headers["api_key"] = Prefs(context).API_KEY
-                return headers
-            }
+        getPostResponse(context, "assets") {
+            Log.d("LOG", "getAssetFolders :  " + it?.folders?.size)
+            function(it?.folders)
         }
-        queue.add(stringRequest)
+    }
+
+    fun getAssetFolders(context: Context, folder: String, function: (folders: Map<String, ArrayList<String>>?) -> (Unit)) {
+        getPostResponse(context, "assets/$folder") {
+            Log.d("LOG", "getAssetFolders $folder:  " + it?.folders?.size)
+            function(it?.folders)
+        }
     }
 }

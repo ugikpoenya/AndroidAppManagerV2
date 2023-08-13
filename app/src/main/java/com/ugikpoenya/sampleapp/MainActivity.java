@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         serverManager.getPosts(this, (response) -> null);
         serverManager.getAssetFiles(this, (response) -> null);
+        serverManager.getAssetFiles(this, "Dian Piesesha", (response) -> null);
         serverManager.getAssetFolders(this, (response) -> null);
+        serverManager.getAssetFolders(this, "Muchsin Alatas", (response) -> null);
 
         appManager.initPrivacyPolicy(this);
         appManager.initDialogRedirect(this);
