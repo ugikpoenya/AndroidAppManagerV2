@@ -22,7 +22,6 @@ import com.facebook.ads.RewardedVideoAdListener
 import com.ugikpoenya.appmanager.AdsManager
 import com.ugikpoenya.appmanager.Prefs
 import com.ugikpoenya.appmanager.R
-import com.ugikpoenya.appmanager.ViewAnimation
 import com.ugikpoenya.appmanager.intervalCounter
 
 
@@ -228,7 +227,6 @@ fun initFacebookNativeBanner(context: Context, VIEW: RelativeLayout, ORDER: Int 
                     NativeBannerAdView.Type.HEIGHT_100
                 )
                 VIEW.addView(adView)
-//                ViewAnimation.expand(adView)
             }
 
             override fun onLoggingImpression(p0: Ad?) {
@@ -277,7 +275,6 @@ fun initFacebookNativeMeidum(context: Context, VIEW: RelativeLayout, ORDER: Int 
                 nativeAd.unregisterView()
                 populateFacebookNative(nativeAd, mAdView)
                 VIEW.addView(mAdView)
-//                ViewAnimation.expand(mAdView)
             }
 
             override fun onLoggingImpression(p0: Ad?) {
