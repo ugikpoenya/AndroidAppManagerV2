@@ -228,7 +228,7 @@ fun initFacebookNativeBanner(context: Context, VIEW: RelativeLayout, ORDER: Int 
                     NativeBannerAdView.Type.HEIGHT_100
                 )
                 VIEW.addView(adView)
-                ViewAnimation.expand(adView)
+//                ViewAnimation.expand(adView)
             }
 
             override fun onLoggingImpression(p0: Ad?) {
@@ -277,7 +277,7 @@ fun initFacebookNativeMeidum(context: Context, VIEW: RelativeLayout, ORDER: Int 
                 nativeAd.unregisterView()
                 populateFacebookNative(nativeAd, mAdView)
                 VIEW.addView(mAdView)
-                ViewAnimation.expand(mAdView)
+//                ViewAnimation.expand(mAdView)
             }
 
             override fun onLoggingImpression(p0: Ad?) {

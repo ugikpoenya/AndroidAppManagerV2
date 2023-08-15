@@ -120,7 +120,7 @@ class AdmobManager {
                         .inflate(nativeLayout, null) as NativeAdView
                     populateAdmobNative(nativeAd, adView)
                     VIEW.addView(adView)
-                    ViewAnimation.expand(adView)
+//                    ViewAnimation.expand(adView)
                 }
                 .withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(adError: LoadAdError) {

@@ -1,84 +1,94 @@
-package com.ugikpoenya.sampleapp;
+package com.ugikpoenya.sampleapp
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ugikpoenya.appmanager.AdsManager
+import com.ugikpoenya.appmanager.AppManager
+import com.ugikpoenya.appmanager.ServerManager
+import com.ugikpoenya.appmanager.ads.AdmobManager
+import com.ugikpoenya.appmanager.holder.AdsViewHolder
+import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 
-import androidx.appcompat.app.AppCompatActivity;
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    val appManager = AppManager()
+    val adsManager = AdsManager()
+    val serverManager = ServerManager()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+//        serverManager.getPosts(this) { response: ArrayList<PostModel?>? -> null }
+//        serverManager.getAssetFiles(this) { response: ArrayList<String?>? -> null }
+//        serverManager.getAssetFiles(this, "Dian Piesesha") { response: ArrayList<String?>? -> null }
+//        serverManager.getAssetFolders(this) { response: Map<String?, ArrayList<String?>?>? -> null }
+//        serverManager.getAssetFolders(this, "Muchsin Alatas") { response: Map<String?, ArrayList<String?>?>? -> null }
+        appManager.initPrivacyPolicy(this)
+        appManager.initDialogRedirect(this)
+        adsManager.initBanner(this, binding!!.lyBannerAds, 0, "home")
 
-import com.ugikpoenya.appmanager.AdsManager;
-import com.ugikpoenya.appmanager.AppManager;
-import com.ugikpoenya.appmanager.ServerManager;
-import com.ugikpoenya.appmanager.ads.AdmobManager;
-import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding;
+        val listLayoutManager = LinearLayoutManager(this)
+        listLayoutManager.orientation = RecyclerView.VERTICAL
+        listLayoutManager.generateDefaultLayoutParams()
+        val dividerItemDecoration = DividerItemDecoration(binding.recyclerView.context, listLayoutManager.orientation)
+        binding.recyclerView.addItemDecoration(dividerItemDecoration)
+        binding.recyclerView.layoutManager = listLayoutManager
+        binding.recyclerView.adapter = groupAdapter
+
+        groupAdapter.add(ItemViewHolder("Privacy Policys") {
+            appManager.showPrivacyPolicy(this)
+        })
+
+        groupAdapter.add(AdsViewHolder(this, 0, "home"))
 
 
-public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
-    AppManager appManager = new AppManager();
-    AdsManager adsManager = new AdsManager();
+        groupAdapter.add(ItemViewHolder("Rate App") {
+            appManager.rateApp(this)
+        })
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        ServerManager serverManager = new ServerManager();
+        groupAdapter.add(AdsViewHolder(this, 0, "detail"))
 
-        serverManager.getPosts(this, (response) -> null);
-        serverManager.getAssetFiles(this, (response) -> null);
-        serverManager.getAssetFiles(this, "Dian Piesesha", (response) -> null);
-        serverManager.getAssetFolders(this, (response) -> null);
-        serverManager.getAssetFolders(this, "Muchsin Alatas", (response) -> null);
+        groupAdapter.add(ItemViewHolder("More App") {
+            appManager.nextApp(this)
+        })
 
-        appManager.initPrivacyPolicy(this);
-        appManager.initDialogRedirect(this);
+        groupAdapter.add(AdsViewHolder(this, 0, "small"))
 
-        adsManager.initBanner(this, binding.lyBannerAds, 0, "home");
-        adsManager.initNative(this, binding.lyNativeAds, 0, "home");
+        groupAdapter.add(ItemViewHolder("Share") {
+            appManager.shareApp(this, getString(R.string.app_name))
+        })
+
+        groupAdapter.add(AdsViewHolder(this, 0, "medium"))
+
+        groupAdapter.add(ItemViewHolder("Interstitial") {
+            adsManager.showInterstitial(this, 0)
+        })
+
+        groupAdapter.add(ItemViewHolder("Rewarded Ads") {
+            adsManager.showRewardedAds(this, 0) { response: Boolean? ->
+                Log.d("LOG", "Rewarded ads result " + response.toString())
+                null
+            }
+        })
+
+        groupAdapter.add(ItemViewHolder("Reset GDPR") {
+            AdmobManager().resetGDPR()
+        })
     }
 
-
-    @Override
-    public void onBackPressed() {
-        new AppManager().exitApp(this);
+    override fun onBackPressed() {
+        AppManager().exitApp(this)
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        new AdmobManager().showOpenAdsAdmob(this);
-    }
-
-
-    public void showPrivacyPolicy(View view) {
-        appManager.showPrivacyPolicy(this);
-    }
-
-    public void shareApp(View view) {
-        appManager.shareApp(this, getString(R.string.app_name));
-    }
-
-    public void nextApp(View view) {
-        appManager.nextApp(this);
-    }
-
-    public void rateApp(View view) {
-        appManager.rateApp(this);
-    }
-
-    public void showInterstitial(View view) {
-        adsManager.showInterstitial(this, 0);
-    }
-
-    public void resetGDPR(View view) {
-        new AdmobManager().resetGDPR();
-    }
-
-    public void showRewardedAds(View view) {
-        adsManager.showRewardedAds(this, 0, (response) -> {
-            Log.d("LOG", "Rewarded ads result " + response.toString());
-            return null;
-        });
+    override fun onStart() {
+        super.onStart()
+        AdmobManager().showOpenAdsAdmob(this)
     }
 }
