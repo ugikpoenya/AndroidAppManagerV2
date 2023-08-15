@@ -28,6 +28,7 @@ import com.google.android.ump.UserMessagingPlatform
 import com.ugikpoenya.appmanager.AdsManager
 import com.ugikpoenya.appmanager.Prefs
 import com.ugikpoenya.appmanager.R
+import com.ugikpoenya.appmanager.ViewAnimation
 import com.ugikpoenya.appmanager.intervalCounter
 
 
@@ -106,7 +107,7 @@ class AdmobManager {
                     val nativeType = when (PAGE) {
                         "home" -> Prefs(context).ITEM_MODEL.home_native_view
                         "detail" -> Prefs(context).ITEM_MODEL.detail_native_view
-                        else -> ""
+                        else -> PAGE
                     }
 
                     val nativeLayout = if (nativeType == "medium") {
@@ -119,6 +120,7 @@ class AdmobManager {
                         .inflate(nativeLayout, null) as NativeAdView
                     populateAdmobNative(nativeAd, adView)
                     VIEW.addView(adView)
+                    ViewAnimation.expand(adView)
                 }
                 .withAdListener(object : AdListener() {
                     override fun onAdFailedToLoad(adError: LoadAdError) {

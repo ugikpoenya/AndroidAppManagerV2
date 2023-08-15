@@ -14,6 +14,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+
+            <RelativeLayout
+                android:id="@+id/lyNativeAds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,12 +87,6 @@
                 android:onClick="resetGDPR"
                 android:text="Reset GDPR" />
 
-
-            <RelativeLayout
-                android:id="@+id/lyNativeAds"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
 
         </LinearLayout>
     </ScrollView>
