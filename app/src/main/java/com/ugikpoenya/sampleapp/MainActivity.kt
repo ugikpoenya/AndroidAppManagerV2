@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ugikpoenya.appmanager.AdsManager
 import com.ugikpoenya.appmanager.AppManager
 import com.ugikpoenya.appmanager.ServerManager
-import com.ugikpoenya.appmanager.ads.AdmobManager
 import com.ugikpoenya.appmanager.holder.AdsViewHolder
 import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding
 import com.xwray.groupie.GroupAdapter
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         groupAdapter.add(ItemViewHolder("Reset GDPR") {
-            AdmobManager().resetGDPR()
+            AdsManager().resetGDPR()
         })
     }
 
@@ -89,6 +88,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        AdmobManager().showOpenAdsAdmob(this)
+        AdsManager().showOpenAds(this)
     }
 }

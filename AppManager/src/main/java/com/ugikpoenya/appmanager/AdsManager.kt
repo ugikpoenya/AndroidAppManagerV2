@@ -135,4 +135,12 @@ class AdsManager {
             function(false)
         }
     }
+
+    fun showOpenAds(context: Context) {
+        AdmobManager().showOpenAdsAdmob(context)
+    }
+
+    fun resetGDPR() {
+        AdmobManager().resetGDPR()
+    }
 }
