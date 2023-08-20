@@ -123,7 +123,7 @@ class AdsManager {
                     function(it)
                 }
 
-                else -> showRewardedAds(context, ORDER) {
+                else -> showRewardedAds(context, ORDER + 1) {
                     Log.d("LOG", "All rewarded result false")
                     dialog.dismiss()
                     function(false)

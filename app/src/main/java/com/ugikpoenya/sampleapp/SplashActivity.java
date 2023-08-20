@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         serverManager.setApiKey(this, "DA8BB129F7C1ED5BD07046961C995A77");
 
         new AdmobManager().addTestDeviceId("01E84CE45ACAE7D0A79D096213298925");
-        new FacebookManager().addTestDeviceId("85546810-d31f-4d61-a1b3-6444f250ca8c");
+        new FacebookManager().addTestDeviceId("87f41216-306a-4a72-81de-195ab2bf7e96");
 
         serverManager.getItemDelay(this, 3000, () -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
