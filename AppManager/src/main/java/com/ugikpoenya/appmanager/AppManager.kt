@@ -168,12 +168,12 @@ class AppManager {
     }
 
     fun nextApp(context: Context) {
-        val packageName = (context as Activity).packageName
-        if (!URLUtil.isValidUrl(Prefs(context).ITEM_MODEL.more_app)) {
-            Prefs(context).ITEM_MODEL.more_app = "https://play.google.com/store/apps/details?id=$packageName"
+        if (Prefs(context).ITEM_MODEL.more_app.isNullOrEmpty()) {
+            rateApp(context)
+        }else{
+            Log.d("LOG", "Open URL " + Prefs(context).ITEM_MODEL.more_app)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Prefs(context).ITEM_MODEL.more_app))
+            context.startActivity(intent)
         }
-        Log.d("LOG", "Open URL " + Prefs(context).ITEM_MODEL.more_app)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Prefs(context).ITEM_MODEL.more_app))
-        context.startActivity(intent)
     }
 }
