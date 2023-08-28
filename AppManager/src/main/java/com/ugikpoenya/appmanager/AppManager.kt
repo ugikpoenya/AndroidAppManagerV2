@@ -34,6 +34,7 @@ class AppManager {
         val btn_no = (dialog.findViewById(R.id.btn_no)) as AppCompatButton
 
         btn_yes.setOnClickListener {
+            dialog.dismiss()
             (context as Activity).finish()
         }
         btn_no.setOnClickListener {
@@ -170,7 +171,7 @@ class AppManager {
     fun nextApp(context: Context) {
         if (Prefs(context).ITEM_MODEL.more_app.isNullOrEmpty()) {
             rateApp(context)
-        }else{
+        } else {
             Log.d("LOG", "Open URL " + Prefs(context).ITEM_MODEL.more_app)
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Prefs(context).ITEM_MODEL.more_app))
             context.startActivity(intent)
