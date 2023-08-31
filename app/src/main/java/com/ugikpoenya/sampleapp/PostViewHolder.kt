@@ -13,5 +13,6 @@ class PostViewHolder(var postModel: PostModel) : BindableItem<ItemPostBinding>()
 
     override fun bind(viewHolder: ItemPostBinding, position: Int) {
         viewHolder.txtTitle.text = postModel.post_title
+        postModel.showPostImage(viewHolder.imageView)
     }
 }
