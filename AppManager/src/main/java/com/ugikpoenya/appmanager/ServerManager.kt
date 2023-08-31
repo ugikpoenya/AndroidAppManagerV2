@@ -125,9 +125,14 @@ class ServerManager {
     }
 
     fun getPosts(context: Context, function: (posts: ArrayList<PostModel>?) -> (Unit)) {
-        getPostResponse(context, "posts") {
-            Log.d("LOG", "getPosts :  " + it?.data?.size)
-            function(it?.data)
+        val localPost=LocalManager().getPosts(context)
+        if(localPost.isEmpty()){
+            getPostResponse(context, "posts") {
+                Log.d("LOG", "getPosts :  " + it?.data?.size)
+                function(it?.data)
+            }
+        }else{
+            function(localPost)
         }
     }
 
