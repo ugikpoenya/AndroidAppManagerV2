@@ -24,11 +24,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        serverManager.getPosts(this) { response: ArrayList<PostModel?>? -> null }
-//        serverManager.getAssetFiles(this) { response: ArrayList<String?>? -> null }
-//        serverManager.getAssetFiles(this, "Dian Piesesha") { response: ArrayList<String?>? -> null }
-//        serverManager.getAssetFolders(this) { response: Map<String?, ArrayList<String?>?>? -> null }
-//        serverManager.getAssetFolders(this, "Muchsin Alatas") { response: Map<String?, ArrayList<String?>?>? -> null }
+
+        serverManager.getPosts(this) { posts -> null }
+
+        serverManager.getAssetFiles(this) { files -> null }
+        serverManager.getAssetFiles(this, "Islami") { files -> null }
+
+        serverManager.getAssetFolders(this) { folders -> null }
+        serverManager.getAssetFolders(this, "Islami") { folders -> null }
+
+        serverManager.getAssets(this) { files, folders -> null }
+        serverManager.getAssets(this, "Islami") { files, folders -> null }
+
+        serverManager.getFolder(this, "Mp3") { files, folders -> null }
+
         appManager.initPrivacyPolicy(this)
         appManager.initDialogRedirect(this)
         adsManager.initBanner(this, binding!!.lyBannerAds, 0, "home")

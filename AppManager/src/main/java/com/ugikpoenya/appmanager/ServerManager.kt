@@ -158,4 +158,25 @@ class ServerManager {
             function(it?.folders)
         }
     }
+
+    fun getAssets(context: Context, function: (files: ArrayList<String>?, folders: Map<String, ArrayList<String>>?) -> (Unit)) {
+        getPostResponse(context, "assets") {
+            Log.d("LOG", "getAssets :  " + it?.files?.size + "/" + it?.folders?.size)
+            function(it?.files, it?.folders)
+        }
+    }
+
+    fun getAssets(context: Context, folder: String, function: (files: ArrayList<String>?, folders: Map<String, ArrayList<String>>?) -> (Unit)) {
+        getPostResponse(context, "assets/$folder") {
+            Log.d("LOG", "getAssets $folder:  " + it?.files?.size + "/" + it?.folders?.size)
+            function(it?.files, it?.folders)
+        }
+    }
+
+    fun getFolder(context: Context, folder: String, function: (files: ArrayList<String>?, folders: Map<String, ArrayList<String>>?) -> (Unit)) {
+        getPostResponse(context, "folder/$folder") {
+            Log.d("LOG", "getFolder $folder:  " + it?.files?.size + "/" + it?.folders?.size)
+            function(it?.files, it?.folders)
+        }
+    }
 }
