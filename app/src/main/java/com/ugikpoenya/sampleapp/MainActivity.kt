@@ -1,5 +1,6 @@
 package com.ugikpoenya.sampleapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = listLayoutManager
         binding.recyclerView.adapter = groupAdapter
 
+        groupAdapter.add(ItemViewHolder("Posts") {
+            startActivity(Intent(this, PostsActivity::class.java))
+        })
+
         groupAdapter.add(ItemViewHolder("Privacy Policys") {
             appManager.showPrivacyPolicy(this)
         })
@@ -61,19 +66,19 @@ class MainActivity : AppCompatActivity() {
             appManager.rateApp(this)
         })
 
-        groupAdapter.add(AdsViewHolder(this, 0, "detail"))
+//        groupAdapter.add(AdsViewHolder(this, 0, "detail"))
 
         groupAdapter.add(ItemViewHolder("More App") {
             appManager.nextApp(this)
         })
 
-        groupAdapter.add(AdsViewHolder(this, 0, "small"))
+//        groupAdapter.add(AdsViewHolder(this, 0, "small"))
 
         groupAdapter.add(ItemViewHolder("Share") {
             appManager.shareApp(this, getString(R.string.app_name))
         })
 
-        groupAdapter.add(AdsViewHolder(this, 0, "medium"))
+//        groupAdapter.add(AdsViewHolder(this, 0, "medium"))
 
         groupAdapter.add(ItemViewHolder("Interstitial") {
             adsManager.showInterstitial(this, 0)
