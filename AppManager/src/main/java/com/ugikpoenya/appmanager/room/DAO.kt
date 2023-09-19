@@ -35,7 +35,7 @@ interface DAO {
     fun getPostsTypeCount(post_type: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPost(tablePosts: TablePosts)
+    fun insertPost(tablePosts: TablePosts): Long
 
     @Update
     fun updatePost(vararg tablePost: TablePosts)
