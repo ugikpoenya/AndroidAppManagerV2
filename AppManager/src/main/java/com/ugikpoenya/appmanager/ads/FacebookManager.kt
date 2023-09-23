@@ -51,6 +51,7 @@ class FacebookManager {
                 .withInitListener {
                     Log.d("LOG", "Facebook Ads Initialized")
                     initFacebookInterstitial(context)
+                    initRewardedFacebook(context)
                 }.initialize()
         }
     }
@@ -157,10 +158,19 @@ class FacebookManager {
         }
     }
 
-    fun showRewardedFacebook(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+    fun showRewardedFacebook(context: Context, ORDER: Int = 0) {
+        if (facebookRewarded != null && facebookRewarded!!.isAdLoaded && !facebookRewarded!!.isAdInvalidated) {
+            facebookRewarded?.show()
+            Log.d("LOG", "Rewarded ID Facebook Show")
+        } else {
+            Log.d("LOG", "Rewarded ID Facebook not loaded")
+            AdsManager().showRewardedAds(context, ORDER)
+        }
+    }
+
+    fun initRewardedFacebook(context: Context) {
         if (Prefs(context).ITEM_MODEL.facebook_rewarded_ads.isEmpty()) {
-            Log.d("LOG", "Facebook Rewarded ID set")
-            AdsManager().showRewardedAds(context, ORDER, function)
+            Log.d("LOG", "Facebook Rewarded ID Not set")
         } else {
             Log.d("LOG", "Init Facebook Rewarded ")
             facebookRewarded = RewardedVideoAd(context, Prefs(context).ITEM_MODEL.facebook_rewarded_ads)
@@ -171,7 +181,6 @@ class FacebookManager {
 
                 override fun onAdLoaded(ad: Ad) {
                     Log.d("LOG", "Facebook Rewarded video ad is loaded and ready to be displayed!")
-                    facebookRewarded?.show();
                 }
 
                 override fun onAdClicked(ad: Ad) {
@@ -184,7 +193,7 @@ class FacebookManager {
 
                 override fun onRewardedVideoCompleted() {
                     Log.d("LOG", "Facebook Rewarded video completed!")
-                    function(true)
+                    initRewardedFacebook(context)
                 }
 
                 override fun onRewardedVideoClosed() {

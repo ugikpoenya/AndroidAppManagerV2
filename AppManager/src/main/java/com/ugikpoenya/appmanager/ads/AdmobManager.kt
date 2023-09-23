@@ -31,6 +31,7 @@ import com.ugikpoenya.appmanager.R
 import com.ugikpoenya.appmanager.intervalCounter
 
 
+var admobRewardedAd: RewardedAd? = null
 var admobInterstitial: InterstitialAd? = null
 private var appOpenAd: AppOpenAd? = null
 private var isShowingOpenAd = false
@@ -56,6 +57,7 @@ class AdmobManager {
             MobileAds.initialize(context) {
                 Log.d("LOG", "initAdmobAds successfully")
                 initInterstitialAdmob(context)
+                initRewardedAdmob(context)
                 initOpenAdsAdmob(context)
             }
 
@@ -182,21 +184,35 @@ class AdmobManager {
     }
 
 
-    fun showRewardedAdmob(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+    fun showRewardedAdmob(context: Context, ORDER: Int = 0) {
+        if (admobRewardedAd != null) {
+            Log.d("LOG", "Rewarded admob Show")
+            admobRewardedAd.let { ad ->
+                ad?.show((context as Activity)) { rewardItem ->
+                    Log.d("LOG", "RewardedAdmob User earned the reward.")
+                }
+            }
+        } else {
+            Log.d("LOG", "Rewarded admob not loaded")
+            AdsManager().showRewardedAds(context, ORDER)
+        }
+    }
+
+    fun initRewardedAdmob(context: Context) {
         if (Prefs(context).ITEM_MODEL.admob_rewarded_ads.isEmpty()) {
-            Log.d("LOG", "Admob Rewarded ID set")
-            AdsManager().showRewardedAds(context, ORDER, function)
+            Log.d("LOG", "Admob Rewarded ID not set")
         } else {
             Log.d("LOG", "Init Admob Rewarded ")
             val adRequest = AdRequest.Builder().build()
             RewardedAd.load(context, Prefs(context).ITEM_MODEL.admob_rewarded_ads, adRequest, object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     Log.d("LOG", "Admob Rewarded " + adError.message)
-                    AdsManager().showRewardedAds(context, ORDER, function)
+                    admobRewardedAd = null
                 }
 
                 override fun onAdLoaded(admobRewarded: RewardedAd) {
                     Log.d("LOG", "Admob Rewarded  was loaded.")
+                    admobRewardedAd = admobRewarded
                     admobRewarded.fullScreenContentCallback = object : FullScreenContentCallback() {
                         override fun onAdClicked() {
                             Log.d("LOG", "Admob Rewarded was clicked.")
@@ -204,6 +220,8 @@ class AdmobManager {
 
                         override fun onAdDismissedFullScreenContent() {
                             Log.d("LOG", "Admob Rewarded dismissed fullscreen content.")
+                            admobRewardedAd = null
+                            initRewardedAdmob(context)
                         }
 
                         override fun onAdFailedToShowFullScreenContent(p0: AdError) {
@@ -216,12 +234,6 @@ class AdmobManager {
 
                         override fun onAdShowedFullScreenContent() {
                             Log.d("LOG", "Ad showed fullscreen content.")
-                        }
-                    }
-                    admobRewarded.let { ad ->
-                        ad.show((context as Activity)) { rewardItem ->
-                            Log.d("LOG", "RewardedAdmob User earned the reward.")
-                            function(true)
                         }
                     }
                 }

@@ -85,10 +85,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         groupAdapter.add(ItemViewHolder("Rewarded Ads") {
-            adsManager.showRewardedAds(this, 0) { response: Boolean? ->
-                Log.d("LOG", "Rewarded ads result " + response.toString())
-                null
-            }
+            adsManager.showRewardedAds(this, 0)
         })
 
         groupAdapter.add(ItemViewHolder("Reset GDPR") {

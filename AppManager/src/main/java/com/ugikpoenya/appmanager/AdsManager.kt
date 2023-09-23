@@ -87,52 +87,21 @@ class AdsManager {
         }
     }
 
-    fun showRewardedAds(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+    fun showRewardedAds(context: Context, ORDER: Int = 0) {
         Log.d("LOG", "Show  RewardedAds $ORDER")
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_loading)
-        val lp = WindowManager.LayoutParams()
-        lp.copyFrom(dialog.window?.attributes)
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog.show()
-        dialog.window?.attributes = lp
-
         var priority: String? = Prefs(context).ITEM_MODEL.interstitial_priority
         if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
         val array = priority.split(",").map { it.toInt() }
         if (array.contains(ORDER)) {
             when {
-                array[ORDER] == ORDER_ADMOB -> AdmobManager().showRewardedAdmob(context, ORDER + 1) {
-                    Log.d("LOG", "showRewardedAdmob result " + it.toString())
-                    dialog.dismiss()
-                    function(it)
-                }
-
-                array[ORDER] == ORDER_FACEBOOK -> FacebookManager().showRewardedFacebook(context, ORDER + 1) {
-                    Log.d("LOG", "showRewardedFacebook result " + it.toString())
-                    dialog.dismiss()
-                    function(it)
-                }
-
-                array[ORDER] == ORDER_UNITY -> UnityManager().showRewardedUnity(context, ORDER + 1) {
-                    Log.d("LOG", "showRewardedUnity result " + it.toString())
-                    dialog.dismiss()
-                    function(it)
-                }
-
-                else -> showRewardedAds(context, ORDER + 1) {
-                    Log.d("LOG", "All rewarded result false")
-                    dialog.dismiss()
-                    function(false)
-                }
+                array[ORDER] == ORDER_ADMOB -> AdmobManager().showRewardedAdmob(context, ORDER + 1)
+                array[ORDER] == ORDER_FACEBOOK -> FacebookManager().showRewardedFacebook(context, ORDER + 1)
+                array[ORDER] == ORDER_UNITY -> UnityManager().showRewardedUnity(context, ORDER + 1)
+                else -> showRewardedAds(context, 0)
             }
         } else {
             Log.d("LOG", "All rewarded null")
-            dialog.dismiss()
-            function(false)
+            showInterstitial(context, 0)
         }
     }
 

@@ -147,10 +147,10 @@ class UnityManager {
         }
     }
 
-    fun showRewardedUnity(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+    fun showRewardedUnity(context: Context, ORDER: Int = 0) {
         if (Prefs(context).ITEM_MODEL.unity_rewarded_ads.isEmpty()) {
             Log.d("LOG", "Unity RewardedAds ID Not set")
-            AdsManager().showRewardedAds(context, ORDER, function)
+            AdsManager().showRewardedAds(context, ORDER)
         } else {
             Log.d("LOG", "Init Unity Ads RewardedAds ")
             UnityAds.show(context as Activity, Prefs(context).ITEM_MODEL.unity_rewarded_ads, UnityAdsShowOptions(), object : IUnityAdsShowListener {
@@ -160,7 +160,7 @@ class UnityManager {
                     p2: String?,
                 ) {
                     Log.d("LOG", "RewardedAds onUnityAdsShowFailure")
-                    AdsManager().showRewardedAds(context, ORDER, function)
+                    AdsManager().showRewardedAds(context, ORDER)
                 }
 
                 override fun onUnityAdsShowStart(p0: String?) {
@@ -176,11 +176,6 @@ class UnityManager {
                     p1: UnityAds.UnityAdsShowCompletionState,
                 ) {
                     Log.d("LOG", "RewardedAds onUnityAdsShowComplete")
-                    if (p1 == UnityAds.UnityAdsShowCompletionState.COMPLETED) {
-                        function(true)
-                    } else {
-                        function(false)
-                    }
                     initRewardedUnity(context)
                 }
             })
