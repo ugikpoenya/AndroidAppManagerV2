@@ -22,22 +22,20 @@ class UnityManager {
                 Log.d("LOG", "Init Unity Ads Production ")
             }
 
-            UnityAds.initialize(
-                context,
-                Prefs(context).ITEM_MODEL.unity_game_id,
-                Prefs(context).ITEM_MODEL.unity_test_mode,
-                object : IUnityAdsInitializationListener {
-                    override fun onInitializationComplete() {
-                        Log.d("LOG", "onUnityAdsReady onInitializationComplete")
-                    }
+            UnityAds.initialize(context, Prefs(context).ITEM_MODEL.unity_game_id, Prefs(context).ITEM_MODEL.unity_test_mode, object : IUnityAdsInitializationListener {
+                override fun onInitializationComplete() {
+                    Log.d("LOG", "onUnityAdsReady onInitializationComplete")
+                    initInterstitialUnity(context)
+                    initRewardedUnity(context)
+                }
 
-                    override fun onInitializationFailed(
-                        p0: UnityAds.UnityAdsInitializationError?,
-                        p1: String?
-                    ) {
-                        Log.d("LOG", "onUnityAdsReady onInitializationFailed")
-                    }
-                })
+                override fun onInitializationFailed(
+                    p0: UnityAds.UnityAdsInitializationError?,
+                    p1: String?,
+                ) {
+                    Log.d("LOG", "onUnityAdsReady onInitializationFailed")
+                }
+            })
         }
     }
 
@@ -47,8 +45,7 @@ class UnityManager {
             AdsManager().initBanner(context, VIEW, ORDER, PAGE)
         } else if (VIEW.childCount == 0) {
             Log.d("LOG", "Unity banner init")
-            val bannerView =
-                BannerView(context as Activity, Prefs(context).ITEM_MODEL.unity_banner, UnityBannerSize.getDynamicSize(context))
+            val bannerView = BannerView(context as Activity, Prefs(context).ITEM_MODEL.unity_banner, UnityBannerSize.getDynamicSize(context))
             bannerView.listener = object : BannerView.IListener {
                 override fun onBannerLeftApplication(p0: BannerView?) {
                     Log.d("LOG", "Unity onBannerLeftApplication ")
@@ -73,51 +70,20 @@ class UnityManager {
         }
     }
 
-
-    fun showInterstitialUnity(context: Context, ORDER: Int = 0) {
+    fun initInterstitialUnity(context: Context) {
         if (Prefs(context).ITEM_MODEL.unity_interstitial.isEmpty()) {
-            Log.d("LOG", "Unity Interstitial ID set")
+            Log.d("LOG", "Unity Interstitial ID Not set")
         } else {
             Log.d("LOG", "Init Unity Ads Interstitial ")
             UnityAds.load(Prefs(context).ITEM_MODEL.unity_interstitial, object : IUnityAdsLoadListener {
                 override fun onUnityAdsAdLoaded(p0: String?) {
                     Log.d("LOG", "Interstitial onUnityAdsAdLoaded $p0")
-                    UnityAds.show(
-                        context as Activity,
-                        Prefs(context).ITEM_MODEL.unity_interstitial,
-                        UnityAdsShowOptions(),
-                        object : IUnityAdsShowListener {
-                            override fun onUnityAdsShowFailure(
-                                p0: String?,
-                                p1: UnityAds.UnityAdsShowError?,
-                                p2: String?
-                            ) {
-                                Log.d("LOG", "Interstitial onUnityAdsShowFailure")
-                                AdsManager().showInterstitial(context, ORDER)
-                            }
-
-                            override fun onUnityAdsShowStart(p0: String?) {
-                                Log.d("LOG", "Interstitial onUnityAdsShowStart")
-                            }
-
-                            override fun onUnityAdsShowClick(p0: String?) {
-                                Log.d("LOG", "Interstitial onUnityAdsShowClick")
-                            }
-
-                            override fun onUnityAdsShowComplete(
-                                p0: String?,
-                                p1: UnityAds.UnityAdsShowCompletionState?
-                            ) {
-                                Log.d("LOG", "Interstitial onUnityAdsShowComplete")
-                            }
-                        }
-                    )
                 }
 
                 override fun onUnityAdsFailedToLoad(
                     p0: String?,
                     p1: UnityAds.UnityAdsLoadError?,
-                    p2: String?
+                    p2: String?,
                 ) {
                     Log.d("LOG", "Interstitial onUnityAdsFailedToLoad")
                 }
@@ -125,58 +91,97 @@ class UnityManager {
         }
     }
 
-    fun showRewardedUnity(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+    fun showInterstitialUnity(context: Context, ORDER: Int = 0) {
+        if (Prefs(context).ITEM_MODEL.unity_interstitial.isEmpty()) {
+            Log.d("LOG", "Unity Interstitial ID Not set")
+        } else {
+            Log.d("LOG", "Show Unity Ads Interstitial ")
+            UnityAds.show(context as Activity, Prefs(context).ITEM_MODEL.unity_interstitial, UnityAdsShowOptions(), object : IUnityAdsShowListener {
+                override fun onUnityAdsShowFailure(
+                    p0: String?,
+                    p1: UnityAds.UnityAdsShowError?,
+                    p2: String?,
+                ) {
+                    Log.d("LOG", "Interstitial onUnityAdsShowFailure")
+                    AdsManager().showInterstitial(context, ORDER)
+                }
+
+                override fun onUnityAdsShowStart(p0: String?) {
+                    Log.d("LOG", "Interstitial onUnityAdsShowStart")
+                }
+
+                override fun onUnityAdsShowClick(p0: String?) {
+                    Log.d("LOG", "Interstitial onUnityAdsShowClick")
+                }
+
+                override fun onUnityAdsShowComplete(
+                    p0: String?,
+                    p1: UnityAds.UnityAdsShowCompletionState?,
+                ) {
+                    Log.d("LOG", "Interstitial onUnityAdsShowComplete")
+                    initInterstitialUnity(context)
+                }
+            })
+        }
+    }
+
+
+    fun initRewardedUnity(context: Context) {
         if (Prefs(context).ITEM_MODEL.unity_rewarded_ads.isEmpty()) {
-            Log.d("LOG", "Unity RewardedAds ID set")
-            AdsManager().showRewardedAds(context, ORDER, function)
+            Log.d("LOG", "Unity RewardedAds ID Not set")
         } else {
             Log.d("LOG", "Init Unity Ads RewardedAds ")
             UnityAds.load(Prefs(context).ITEM_MODEL.unity_rewarded_ads, object : IUnityAdsLoadListener {
                 override fun onUnityAdsAdLoaded(p0: String?) {
                     Log.d("LOG", "RewardedAds onUnityAdsAdLoaded $p0")
-                    UnityAds.show(
-                        context as Activity,
-                        Prefs(context).ITEM_MODEL.unity_rewarded_ads,
-                        UnityAdsShowOptions(),
-                        object : IUnityAdsShowListener {
-                            override fun onUnityAdsShowFailure(
-                                p0: String?,
-                                p1: UnityAds.UnityAdsShowError?,
-                                p2: String?
-                            ) {
-                                Log.d("LOG", "RewardedAds onUnityAdsShowFailure")
-                                AdsManager().showRewardedAds(context, ORDER, function)
-                            }
-
-                            override fun onUnityAdsShowStart(p0: String?) {
-                                Log.d("LOG", "RewardedAds onUnityAdsShowStart")
-                            }
-
-                            override fun onUnityAdsShowClick(p0: String?) {
-                                Log.d("LOG", "RewardedAds onUnityAdsShowClick")
-                            }
-
-                            override fun onUnityAdsShowComplete(
-                                p0: String,
-                                p1: UnityAds.UnityAdsShowCompletionState
-                            ) {
-                                Log.d("LOG", "RewardedAds onUnityAdsShowComplete")
-                                if (p1 == UnityAds.UnityAdsShowCompletionState.COMPLETED) {
-                                    function(true)
-                                } else {
-                                    function(false)
-                                }
-                            }
-                        }
-                    )
                 }
 
                 override fun onUnityAdsFailedToLoad(
                     p0: String?,
                     p1: UnityAds.UnityAdsLoadError?,
-                    p2: String?
+                    p2: String?,
                 ) {
                     Log.d("LOG", "RewardedAds onUnityAdsFailedToLoad")
+                }
+            })
+        }
+    }
+
+    fun showRewardedUnity(context: Context, ORDER: Int = 0, function: (response: Boolean?) -> (Unit)) {
+        if (Prefs(context).ITEM_MODEL.unity_rewarded_ads.isEmpty()) {
+            Log.d("LOG", "Unity RewardedAds ID Not set")
+            AdsManager().showRewardedAds(context, ORDER, function)
+        } else {
+            Log.d("LOG", "Init Unity Ads RewardedAds ")
+            UnityAds.show(context as Activity, Prefs(context).ITEM_MODEL.unity_rewarded_ads, UnityAdsShowOptions(), object : IUnityAdsShowListener {
+                override fun onUnityAdsShowFailure(
+                    p0: String?,
+                    p1: UnityAds.UnityAdsShowError?,
+                    p2: String?,
+                ) {
+                    Log.d("LOG", "RewardedAds onUnityAdsShowFailure")
+                    AdsManager().showRewardedAds(context, ORDER, function)
+                }
+
+                override fun onUnityAdsShowStart(p0: String?) {
+                    Log.d("LOG", "RewardedAds onUnityAdsShowStart")
+                }
+
+                override fun onUnityAdsShowClick(p0: String?) {
+                    Log.d("LOG", "RewardedAds onUnityAdsShowClick")
+                }
+
+                override fun onUnityAdsShowComplete(
+                    p0: String,
+                    p1: UnityAds.UnityAdsShowCompletionState,
+                ) {
+                    Log.d("LOG", "RewardedAds onUnityAdsShowComplete")
+                    if (p1 == UnityAds.UnityAdsShowCompletionState.COMPLETED) {
+                        function(true)
+                    } else {
+                        function(false)
+                    }
+                    initRewardedUnity(context)
                 }
             })
         }
