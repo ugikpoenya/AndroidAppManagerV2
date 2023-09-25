@@ -2,7 +2,7 @@
 <resources>
     <string name="PRIVACY_POLICY_TITLE">Kebijakan Privasi</string>
     <string name="PRIVACY_POLICY_CONTENT">
-Dengan menggunakan Aplikasi ini, Anda setuju dengan <a href="#">Persyaratan Ketentuan</a>,<a href="#">Kebijakan Cookie</a> dan <a href="#">Kebijakan Privasi</a> dan menyetujui untuk memiliki data pribadi Anda, perilaku yang ditransfer dan diproses di luar UE.
+Dengan menggunakan Aplikasi ini, Anda setuju dengan Persyaratan Ketentuan, Kebijakan Cookie dan Kebijakan Privasi dan menyetujui untuk memiliki data pribadi Anda, perilaku yang ditransfer dan diproses di luar UE.
     </string>
     <string name="ACCEPT">TERIMA</string>
     <string name="DECLINE">TOLAK</string>
