@@ -58,4 +58,11 @@ class ItemModel {
     var redirect_url: String = ""
     var redirect_cancelable: Boolean = true
 
+
+    //Custom
+    var ONESIGNAL_APP_ID: String = ""
+    var DEEPAI_API_KEY: String = ""
+    var OPENAI_API_KEY: String = ""
+    var IMAGINE_API_KEY: String = ""
+
 }

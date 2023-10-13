@@ -24,8 +24,8 @@ public class SplashActivity extends AppCompatActivity {
         serverManager.setBaseUrl(this, "https://master.ugikpoenya.net/api/");
         serverManager.setApiKey(this, "DA8BB129F7C1ED5BD07046961C995A77");
 
-        new AdmobManager().addTestDeviceId("088FD3EB8C7E984A6EEA2CEFCA4E1190");
-        new FacebookManager().addTestDeviceId("224cc677-fff2-416b-a5af-156b79bf7c45");
+        new AdmobManager().addTestDeviceId("408B66CD374D7D5E90132B65146233B2");
+        new FacebookManager().addTestDeviceId("121ee13b-ad34-44f6-add2-300d2fe282cc");
 
         serverManager.getItemDelay(this, 3000, () -> {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));

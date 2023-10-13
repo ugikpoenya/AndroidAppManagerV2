@@ -64,6 +64,9 @@ class ServerManager {
         }
     }
 
+    private fun initOneSignal() {
+        Log.d("LOG", "initOneSignal")
+    }
 
     fun getItemResponse(context: Context, function: (response: String?) -> (Unit)) {
         if (Prefs(context).BASE_URL.isEmpty()) {
@@ -77,6 +80,11 @@ class ServerManager {
                     val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
                     Prefs(context).ITEM_RESPONSE = response
                     Prefs(context).ITEM_MODEL = itemResponse.item
+
+                    if (itemResponse.item.ONESIGNAL_APP_ID.isNotEmpty()) {
+                        initOneSignal()
+                    }
+
                     function(response)
 
                 } catch (e: Exception) {
@@ -125,13 +133,13 @@ class ServerManager {
     }
 
     fun getPosts(context: Context, function: (posts: ArrayList<PostModel>?) -> (Unit)) {
-        val localPost=LocalManager().getPosts(context)
-        if(localPost.isEmpty()){
+        val localPost = LocalManager().getPosts(context)
+        if (localPost.isEmpty()) {
             getPostResponse(context, "posts") {
                 Log.d("LOG", "getPosts :  " + it?.data?.size)
                 function(it?.data)
             }
-        }else{
+        } else {
             function(localPost)
         }
     }

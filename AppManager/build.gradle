@@ -16,7 +16,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -44,10 +44,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-ads:22.3.0'
+    implementation 'com.google.android.gms:play-services-ads:22.4.0'
     implementation 'com.google.android.ump:user-messaging-platform:2.1.0'
-    implementation 'com.google.ads.mediation:facebook:6.15.0.0'
-    implementation 'com.facebook.android:audience-network-sdk:6.15.0'
+    implementation 'com.google.ads.mediation:facebook:6.16.0.0'
+    implementation 'com.facebook.android:audience-network-sdk:6.16.0'
     implementation 'com.unity3d.ads:unity-ads:4.7.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 }
