@@ -14,9 +14,15 @@ import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import com.onesignal.OneSignal
+import com.onesignal.debug.LogLevel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class AppManager {
@@ -42,6 +48,39 @@ class AppManager {
         }
         dialog.show()
         dialog.window?.attributes = lp
+    }
+
+    fun initOneSignal(context: Context) {
+        val OneSignalAppId = Prefs(context).ITEM_MODEL.ONESIGNAL_APP_ID
+        if (OneSignalAppId.isNotEmpty()) {
+            Log.d("LOG", "initOneSignal")
+            // Verbose Logging set to help debug issues, remove before releasing your app.
+
+            if (BuildConfig.DEBUG) {
+                OneSignal.Debug.logLevel = LogLevel.VERBOSE
+            }
+
+            // OneSignal Initialization
+            OneSignal.initWithContext(context, OneSignalAppId)
+
+            // requestPermission will show the native Android notification permission prompt.
+            // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
+            CoroutineScope(Dispatchers.IO).launch {
+                OneSignal.Notifications.requestPermission(true)
+            }
+        }
+    }
+
+
+    fun initAppMain(context: Context) {
+        initPrivacyPolicy(context)
+        initDialogRedirect(context)
+        initOneSignal(context)
+    }
+
+    fun initAppMain(context: Context, lyBanner: RelativeLayout) {
+        initAppMain(context)
+        AdsManager().initBanner(context, lyBanner, 0, "home")
     }
 
     fun initPrivacyPolicy(context: Context) {

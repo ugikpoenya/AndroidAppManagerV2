@@ -1,16 +1,22 @@
 package com.ugikpoenya.appmanager
 
 import android.content.Context
+import android.graphics.Bitmap.Config
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.onesignal.OneSignal
+import com.onesignal.debug.LogLevel
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 val DEFAULT_NATIVE_START = 2
@@ -64,9 +70,6 @@ class ServerManager {
         }
     }
 
-    private fun initOneSignal() {
-        Log.d("LOG", "initOneSignal")
-    }
 
     fun getItemResponse(context: Context, function: (response: String?) -> (Unit)) {
         if (Prefs(context).BASE_URL.isEmpty()) {
@@ -80,11 +83,6 @@ class ServerManager {
                     val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
                     Prefs(context).ITEM_RESPONSE = response
                     Prefs(context).ITEM_MODEL = itemResponse.item
-
-                    if (itemResponse.item.ONESIGNAL_APP_ID.isNotEmpty()) {
-                        initOneSignal()
-                    }
-
                     function(response)
 
                 } catch (e: Exception) {

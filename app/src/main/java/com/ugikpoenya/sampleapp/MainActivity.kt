@@ -2,7 +2,6 @@ package com.ugikpoenya.sampleapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,9 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         serverManager.getFolder(this, "Mp3") { files, folders -> null }
 
-        appManager.initPrivacyPolicy(this)
-        appManager.initDialogRedirect(this)
-        adsManager.initBanner(this, binding!!.lyBannerAds, 0, "home")
+        appManager.initAppMain(this, binding.lyBannerAds)
 
         val listLayoutManager = LinearLayoutManager(this)
         listLayoutManager.orientation = RecyclerView.VERTICAL
