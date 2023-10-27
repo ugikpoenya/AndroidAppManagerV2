@@ -17,6 +17,7 @@ class PostModel : Serializable {
     var post_parent: Int? = null
     var item: ArrayList<PostModel>? = null
     var post_item: ArrayList<PostModel>? = null
+    var categories: ArrayList<Category>? = null
 
     fun showPostImage(imageView: ImageView) {
         Picasso.get()

@@ -2,6 +2,7 @@ package com.ugikpoenya.sampleapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        serverManager.getPosts(this) { posts -> null }
+        Log.d("LOG", "Category " + serverManager.getCategories(this).size)
+        serverManager.getCategories(this).forEach {
+            Log.d("LOG", it.categori_id + " / " + it.categori)
+        }
+
+        serverManager.getPosts(this) { posts ->
+            posts?.forEach {
+                Log.d("LOG", it.post_title.toString())
+                it.categories?.forEach { cat ->
+                    Log.d("LOG", cat.categori_id + " / " + cat.categori)
+                }
+            }
+        }
 
         serverManager.getAssetFiles(this) { files -> null }
         serverManager.getAssetFiles(this, "Islami") { files -> null }

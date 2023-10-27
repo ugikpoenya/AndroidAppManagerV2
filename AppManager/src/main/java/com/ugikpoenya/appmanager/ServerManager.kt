@@ -1,22 +1,17 @@
 package com.ugikpoenya.appmanager
 
 import android.content.Context
-import android.graphics.Bitmap.Config
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
-import com.onesignal.OneSignal
-import com.onesignal.debug.LogLevel
+import com.ugikpoenya.appmanager.model.Category
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 val DEFAULT_NATIVE_START = 2
@@ -70,6 +65,22 @@ class ServerManager {
         }
     }
 
+    fun getCategories(context: Context): ArrayList<Category> {
+        val categoryList = ArrayList<Category>()
+        return try {
+            val itemResponse = Gson().fromJson(Prefs(context).ITEM_RESPONSE, ItemResponse::class.java)
+            val itr = itemResponse.categories?.iterator()
+            if (itr != null) {
+                while (itr.hasNext()) {
+                    categoryList.add(itr.next().value)
+                }
+            }
+            categoryList
+        } catch (e: Exception) {
+            Log.d("LOG", "Error : " + e.message)
+            categoryList
+        }
+    }
 
     fun getItemResponse(context: Context, function: (response: String?) -> (Unit)) {
         if (Prefs(context).BASE_URL.isEmpty()) {
