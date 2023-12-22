@@ -60,6 +60,10 @@ class UnityManager {
                     VIEW.addView(p0)
                 }
 
+                override fun onBannerShown(bannerAdView: BannerView?) {
+                    Log.d("LOG", "Unity onBannerShown ")
+                }
+
                 override fun onBannerFailedToLoad(p0: BannerView?, p1: BannerErrorInfo?) {
                     Log.d("LOG", "Unity onBannerFailedToLoad ")
                     VIEW.clearAnimation()
