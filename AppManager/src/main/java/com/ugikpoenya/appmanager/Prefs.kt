@@ -18,10 +18,6 @@ class Prefs(context: Context) {
         get() = prefs.getString("API_KEY", "").toString()
         set(value) = prefs.edit().putString("API_KEY", value).apply()
 
-    var PRIVACY_POLICY: String
-        get() = prefs.getString("PRIVACY_POLICY", "").toString()
-        set(value) = prefs.edit().putString("PRIVACY_POLICY", value).apply()
-
     var ITEM_RESPONSE: String
         get() = prefs.getString("ITEM_RESPONSE", "").toString()
         set(value) = prefs.edit().putString("ITEM_RESPONSE", value).apply()
@@ -88,4 +84,12 @@ class Prefs(context: Context) {
             }
 
         }
+
+    var version_code: Int
+        get() = prefs.getInt("version_code", 0)
+        set(value) = prefs.edit().putInt("version_code", value).apply()
+
+    var privacy_policy: Boolean
+        get() = prefs.getBoolean("privacy_policy", false)
+        set(value) = prefs.edit().putBoolean("privacy_policy", value).apply()
 }

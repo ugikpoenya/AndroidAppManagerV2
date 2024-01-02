@@ -28,10 +28,6 @@ class ServerManager {
         Prefs(context).API_KEY = api_key
     }
 
-    fun setPrivacyPolicy(context: Context, privacy_policy: String) {
-        Prefs(context).PRIVACY_POLICY = privacy_policy
-    }
-
     fun getItemModel(context: Context): ItemModel {
         Log.d("LOG", "getItemModel")
         return Prefs(context).ITEM_MODEL
