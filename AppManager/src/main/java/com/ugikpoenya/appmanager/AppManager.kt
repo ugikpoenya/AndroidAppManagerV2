@@ -73,7 +73,6 @@ class AppManager {
 
 
     fun initAppMain(context: Context) {
-        initPrivacyPolicy(context)
         initDialogRedirect(context)
         initOneSignal(context)
     }
@@ -81,12 +80,6 @@ class AppManager {
     fun initAppMain(context: Context, lyBanner: RelativeLayout) {
         initAppMain(context)
         AdsManager().initBanner(context, lyBanner, 0, "home")
-    }
-
-    fun initPrivacyPolicy(context: Context) {
-        if (!Prefs(context).privacy_policy) {
-            showPrivacyPolicy(context)
-        }
     }
 
     fun showPrivacyPolicy(context: Context) {
