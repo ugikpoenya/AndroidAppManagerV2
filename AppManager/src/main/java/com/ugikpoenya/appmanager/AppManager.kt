@@ -73,7 +73,6 @@ class AppManager {
 
 
     fun initAppMain(context: Context) {
-        initPrivacyPolicy(context)
         initDialogRedirect(context)
         initOneSignal(context)
     }
@@ -83,48 +82,11 @@ class AppManager {
         AdsManager().initBanner(context, lyBanner, 0, "home")
     }
 
-    fun initPrivacyPolicy(context: Context) {
-        if (!Prefs(context).privacy_policy) {
-            showPrivacyPolicy(context)
-        }
-    }
-
     fun showPrivacyPolicy(context: Context) {
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        val lp = WindowManager.LayoutParams()
-        lp.copyFrom(dialog.window?.attributes)
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-
-        if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
-            dialog.setContentView(R.layout.dialog_privacy_policy)
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-        } else {
-            dialog.setContentView(R.layout.dialog_privacy_policy_web)
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT
-        }
-
-        val bt_accept = (dialog.findViewById(R.id.bt_accept)) as AppCompatButton
-        val bt_decline = (dialog.findViewById(R.id.bt_decline)) as AppCompatButton
-
-        if (Prefs(context).ITEM_MODEL.privacy_policy.isNullOrEmpty()) {
-            val tv_content = (dialog.findViewById(R.id.tv_content)) as TextView
-            tv_content.movementMethod = LinkMovementMethod.getInstance()
-        } else {
-            val webView = (dialog.findViewById(R.id.webView)) as WebView
-            webView.loadUrl(Prefs(context).ITEM_MODEL.privacy_policy)
-        }
-        bt_accept.setOnClickListener {
-            Prefs(context).privacy_policy = true
-            dialog.dismiss()
-        }
-        bt_decline.setOnClickListener {
-            Prefs(context).privacy_policy = false
-            dialog.dismiss()
-        }
-        dialog.show()
-        dialog.window?.attributes = lp
+        val privacyPolicy = Prefs(context).PRIVACY_POLICY
+        Log.d("LOG", "Open privacyPolicy $privacyPolicy")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(privacyPolicy))
+        context.startActivity(intent)
     }
 
     fun initDialogRedirect(context: Context) {
