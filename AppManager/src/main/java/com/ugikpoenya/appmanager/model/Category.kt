@@ -1,6 +1,8 @@
 package com.ugikpoenya.appmanager.model
 
-class Category {
+import java.io.Serializable
+
+class Category :Serializable {
     var categori_id: String? = null
     var categori: String? = null
 }

@@ -18,9 +18,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".PostsActivity"
+            android:name=".DetailActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
+        <activity
+            android:name=".PostsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
             android:exported="false"

@@ -1,6 +1,9 @@
 package com.ugikpoenya.sampleapp
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,8 +48,31 @@ class PostsActivity : AppCompatActivity() {
             }
         })
 
+        groupAdapter.setOnItemClickListener { item, view ->
+            when (item) {
+                is PostViewHolder -> {
+                    Log.d("LOG", "Detail  ${item.postModel.post_title}")
+                    val intent = Intent(this, DetailActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putSerializable("postModel", item.postModel)
+                    intent.putExtras(bundle)
+                    detailLauncher.launch(intent)
+                    AdsManager().showInterstitial(this, 0)
+                }
+            }
+        }
+
+
         getPosts()
     }
+
+    private var detailLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                Log.d("LOG", "detailLauncher Result $result")
+            }
+        }
+
 
     fun getPosts() {
         isLoading = true
