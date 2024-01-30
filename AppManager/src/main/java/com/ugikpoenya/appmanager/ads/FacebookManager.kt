@@ -96,7 +96,7 @@ class FacebookManager {
             val nativeType = when (PAGE) {
                 "home" -> Prefs(context).ITEM_MODEL.home_native_view
                 "detail" -> Prefs(context).ITEM_MODEL.detail_native_view
-                else -> PAGE
+                else -> ""
             }
 
             if (nativeType == "medium") {

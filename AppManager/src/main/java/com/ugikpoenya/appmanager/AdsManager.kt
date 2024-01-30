@@ -30,42 +30,58 @@ class AdsManager {
 
 
     fun initBanner(context: Context, view: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
-        if (view.childCount == 0) {
-            Log.d("LOG", "initBanner $ORDER")
-            var priority: String? = ""
-            if (PAGE.lowercase() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
-            if (PAGE.lowercase() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
-            if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
+        var bannerView = true
+        if (PAGE.lowercase().trim() == "home") bannerView = Prefs(context).ITEM_MODEL.home_banner
+        if (PAGE.lowercase().trim() == "detail") bannerView = Prefs(context).ITEM_MODEL.detail_banner
+        if(bannerView){
+            if (view.childCount == 0) {
+                Log.d("LOG", "initBanner $ORDER $PAGE")
+                var priority: String? = ""
+                if (PAGE.lowercase().trim() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
+                if (PAGE.lowercase().trim() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
+                if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
 
-            val array = priority.split(",").map { it.toInt() }
-            if (array.contains(ORDER)) {
-                when {
-                    array[ORDER] == ORDER_ADMOB -> AdmobManager().initAdmobBanner(context, view, ORDER + 1, PAGE)
-                    array[ORDER] == ORDER_FACEBOOK -> FacebookManager().initFacebookBanner(context, view, ORDER + 1, PAGE)
-                    array[ORDER] == ORDER_UNITY -> UnityManager().initUnityBanner(context, view, ORDER + 1, PAGE)
-                    else -> initBanner(context, view, ORDER + 1, PAGE)
+                val array = priority.split(",").map { it.toInt() }
+                if (array.contains(ORDER)) {
+                    when {
+                        array[ORDER] == ORDER_ADMOB -> AdmobManager().initAdmobBanner(context, view, ORDER + 1, PAGE)
+                        array[ORDER] == ORDER_FACEBOOK -> FacebookManager().initFacebookBanner(context, view, ORDER + 1, PAGE)
+                        array[ORDER] == ORDER_UNITY -> UnityManager().initUnityBanner(context, view, ORDER + 1, PAGE)
+                        else -> initBanner(context, view, ORDER + 1, PAGE)
+                    }
                 }
             }
+        }else{
+            Log.d("LOG", "Banner $PAGE disable")
         }
     }
 
     fun initNative(context: Context, view: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
-        if (view.childCount == 0) {
-            Log.d("LOG", "initNative $ORDER")
-            var priority: String? = ""
-            if (PAGE.lowercase() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
-            if (PAGE.lowercase() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
-            if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
+        var nativeView=true
+        if (PAGE.lowercase().trim() == "home") nativeView = Prefs(context).ITEM_MODEL.home_native
+        if (PAGE.lowercase().trim() == "detail") nativeView = Prefs(context).ITEM_MODEL.detail_native
 
-            val array = priority.split(",").map { it.toInt() }
-            if (array.contains(ORDER)) {
-                when {
-                    array[ORDER] == ORDER_ADMOB -> AdmobManager().initAdmobNative(context, view, ORDER + 1, PAGE)
-                    array[ORDER] == ORDER_FACEBOOK -> FacebookManager().initFacebookNative(context, view, ORDER + 1, PAGE)
-                    else -> initNative(context, view, ORDER + 1, PAGE)
+        if(nativeView){
+            if (view.childCount == 0) {
+                Log.d("LOG", "initNative $ORDER $PAGE")
+                var priority: String? = ""
+                if (PAGE.lowercase().trim() == "home") priority = Prefs(context).ITEM_MODEL.home_priority
+                if (PAGE.lowercase().trim() == "detail") priority = Prefs(context).ITEM_MODEL.detail_priority
+                if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
+
+                val array = priority.split(",").map { it.toInt() }
+                if (array.contains(ORDER)) {
+                    when {
+                        array[ORDER] == ORDER_ADMOB -> AdmobManager().initAdmobNative(context, view, ORDER + 1, PAGE)
+                        array[ORDER] == ORDER_FACEBOOK -> FacebookManager().initFacebookNative(context, view, ORDER + 1, PAGE)
+                        else -> initNative(context, view, ORDER + 1, PAGE)
+                    }
                 }
             }
+        }else{
+            Log.d("LOG", "Native $PAGE disable")
         }
+
     }
 
     fun showInterstitial(context: Context, ORDER: Int = 0) {

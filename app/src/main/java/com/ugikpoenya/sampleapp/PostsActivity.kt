@@ -59,9 +59,8 @@ class PostsActivity : AppCompatActivity() {
             }
             response?.forEach {
                 groupAdapter.add(PostViewHolder(it))
-                if (itemIndex == 1) groupAdapter.add(AdsViewHolder(this, 0, "detail"))
-                if (itemIndex == 5) groupAdapter.add(AdsViewHolder(this, 0, "small"))
-                if (itemIndex == 10) groupAdapter.add(AdsViewHolder(this, 0, "medium"))
+                if (itemIndex == 1) groupAdapter.add(AdsViewHolder(this, 0, "home"))
+                if (itemIndex == 5) groupAdapter.add(AdsViewHolder(this, 0, "detail"))
                 itemIndex++
             }
             isLoading = false
