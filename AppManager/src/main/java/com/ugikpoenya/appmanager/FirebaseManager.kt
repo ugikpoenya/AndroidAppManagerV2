@@ -12,9 +12,10 @@ import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.URLEncoder
 
 
-class FirbaseManager {
+class FirebaseManager {
 
     fun setBaseUrl(context: Context, firebase_url: String) {
         Prefs(context).FIREBASE_URL = firebase_url
@@ -68,10 +69,7 @@ class FirbaseManager {
                     Log.d("LOG", "Error : " + it.message.toString())
                     function(null)
                 })
-
             queue.add(stringRequest)
-
-
         }
     }
 
@@ -110,4 +108,57 @@ class FirbaseManager {
         }
     }
 
+    fun getAssetStorage(context: Context, function: (name: ArrayList<String>?) -> (Unit)) {
+        getAssetStorage(context, getItemModel(context).asset_folder, function)
+    }
+
+    fun getAssetStorage(context: Context, parent: String, function: (name: ArrayList<String>?) -> (Unit)) {
+        val itemModel = getItemModel(context)
+        if (Prefs(context).FIREBASE_URL.isEmpty()) {
+            Log.d("LOG", "Firebase url not found")
+            function(null)
+        } else if (itemModel.asset_storage.isEmpty()) {
+            Log.d("LOG", "Asset storage not found")
+            function(null)
+        } else {
+            val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parent + "\""
+            Log.d("LOG", storageUrl)
+            val queue = Volley.newRequestQueue(context)
+            val stringRequest = StringRequest(
+                Request.Method.GET,
+                storageUrl,
+                { response ->
+                    Log.d("LOG", "getAssetStorage successfully")
+                    try {
+                        var listFile: ArrayList<String> = ArrayList<String>()
+                        val json = JSONObject(response)
+                        val iter = json.keys()
+                        while (iter.hasNext()) {
+                            val key = iter.next()
+                            try {
+                                val value = json.getJSONObject(key)
+                                var name = value.getString("name")
+                                if (name.substringAfterLast("/").isEmpty()) {
+                                    listFile.add(name.substringBeforeLast("/"))
+                                } else {
+                                    name = URLEncoder.encode(name, "UTF-8");
+                                    val urlName = "https://firebasestorage.googleapis.com/v0/b/" + itemModel.asset_storage + ".appspot.com/o/" + name + "?alt=media"
+                                    listFile.add(urlName)
+                                }
+                            } catch (e: JSONException) {
+                                Log.d("LOG", e.message.toString())
+                            }
+                        }
+                        function(listFile)
+                    } catch (e: Exception) {
+                        Log.d("LOG", "Error Storage: " + e.message)
+                        function(null)
+                    }
+                }, {
+                    Log.d("LOG", "Error Storage: " + it.message.toString())
+                    function(null)
+                })
+            queue.add(stringRequest)
+        }
+    }
 }

@@ -11,6 +11,7 @@ class ItemModel {
     var privacy_policy: String = ""
     var asset_folder: String = ""
     var asset_url: String = ""
+    var asset_storage: String = ""
 
     var interstitial_interval: Int = DEFAULT_INTERSTITIAL_INTERVAL
     var native_start: Int = DEFAULT_NATIVE_START
