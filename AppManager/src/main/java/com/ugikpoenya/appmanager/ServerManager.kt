@@ -100,7 +100,6 @@ class ServerManager {
                     Log.d("LOG", "Error : " + e.message)
                     function(null)
                 }
-                function(response)
             }, com.android.volley.Response.ErrorListener {
                 Log.d("LOG", "Error : " + it.message.toString())
                 function(null)
