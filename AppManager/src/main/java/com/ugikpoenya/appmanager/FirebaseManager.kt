@@ -8,11 +8,11 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.ugikpoenya.appmanager.model.FileModel
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.URLEncoder
 
 
 class FirebaseManager {
@@ -108,11 +108,11 @@ class FirebaseManager {
         }
     }
 
-    fun getAssetStorage(context: Context, function: (name: ArrayList<String>?) -> (Unit)) {
-        getAssetStorage(context, getItemModel(context).asset_folder, function)
+    fun getAssetStorage(context: Context, function: (name: ArrayList<FileModel>?) -> (Unit)) {
+        getAssetStorage(context, "", function)
     }
 
-    fun getAssetStorage(context: Context, parent: String, function: (name: ArrayList<String>?) -> (Unit)) {
+    fun getAssetStorage(context: Context, parent: String, function: (name: ArrayList<FileModel>?) -> (Unit)) {
         val itemModel = getItemModel(context)
         if (Prefs(context).FIREBASE_URL.isEmpty()) {
             Log.d("LOG", "Firebase url not found")
@@ -121,7 +121,10 @@ class FirebaseManager {
             Log.d("LOG", "Asset storage not found")
             function(null)
         } else {
-            val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parent + "\""
+            val parentUrl: String = if (parent.isEmpty()) getItemModel(context).asset_folder
+            else getItemModel(context).asset_folder + "/" + parent
+
+            val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parentUrl + "\""
             Log.d("LOG", storageUrl)
             val queue = Volley.newRequestQueue(context)
             val stringRequest = StringRequest(
@@ -130,21 +133,20 @@ class FirebaseManager {
                 { response ->
                     Log.d("LOG", "getAssetStorage successfully")
                     try {
-                        var listFile: ArrayList<String> = ArrayList<String>()
+                        val listFile: ArrayList<FileModel> = ArrayList()
                         val json = JSONObject(response)
                         val iter = json.keys()
                         while (iter.hasNext()) {
                             val key = iter.next()
                             try {
                                 val value = json.getJSONObject(key)
-                                var name = value.getString("name")
-                                if (name.substringAfterLast("/").isEmpty()) {
-                                    listFile.add(name.substringBeforeLast("/"))
-                                } else {
-                                    name = URLEncoder.encode(name, "UTF-8");
-                                    val urlName = "https://firebasestorage.googleapis.com/v0/b/" + itemModel.asset_storage + ".appspot.com/o/" + name + "?alt=media"
-                                    listFile.add(urlName)
-                                }
+                                val fileModel = FileModel()
+                                fileModel.id = key
+                                if (value.has("name")) fileModel.name = value.getString("name")
+                                if (value.has("url")) fileModel.url = value.getString("url")
+                                if (value.has("size")) fileModel.size = value.getString("size")
+                                if (value.has("parent")) fileModel.parent = value.getString("parent")
+                                listFile.add(fileModel)
                             } catch (e: JSONException) {
                                 Log.d("LOG", e.message.toString())
                             }
