@@ -125,7 +125,6 @@ class FirebaseManager {
             else getItemModel(context).asset_folder + "/" + parent
 
             val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parentUrl + "\""
-            Log.d("LOG", storageUrl)
             val queue = Volley.newRequestQueue(context)
             val stringRequest = StringRequest(
                 Request.Method.GET,
@@ -141,9 +140,9 @@ class FirebaseManager {
                             try {
                                 val value = json.getJSONObject(key)
                                 val fileModel = FileModel()
-                                fileModel.id = key
                                 if (value.has("name")) fileModel.name = value.getString("name")
                                 if (value.has("url")) fileModel.url = value.getString("url")
+                                if (value.has("thumb")) fileModel.url = value.getString("thumb")
                                 if (value.has("size")) fileModel.size = value.getString("size")
                                 if (value.has("parent")) fileModel.parent = value.getString("parent")
                                 listFile.add(fileModel)
@@ -158,6 +157,27 @@ class FirebaseManager {
                     }
                 }, {
                     Log.d("LOG", "Error Storage: " + it.message.toString())
+                    function(null)
+                })
+            queue.add(stringRequest)
+        }
+    }
+
+    fun getJsonObject(context: Context, url: String, function: (name: JSONObject?) -> (Unit)) {
+        if (Prefs(context).FIREBASE_URL.isEmpty()) {
+            Log.d("LOG", "Firebase url not found")
+            function(null)
+        } else {
+            val storageUrl = Prefs(context).FIREBASE_URL + "/" + url
+            val queue = Volley.newRequestQueue(context)
+            val stringRequest = StringRequest(
+                Request.Method.GET,
+                storageUrl,
+                { response ->
+                    Log.d("LOG", "getJsonObject successfully")
+                    function(JSONObject(response))
+                }, {
+                    Log.d("LOG", "Error JsonObject : " + it.message.toString())
                     function(null)
                 })
             queue.add(stringRequest)
