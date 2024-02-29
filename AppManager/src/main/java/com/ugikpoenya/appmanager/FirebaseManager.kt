@@ -108,11 +108,11 @@ class FirebaseManager {
         }
     }
 
-    fun getAssetStorage(context: Context, function: (name: ArrayList<FileModel>?) -> (Unit)) {
-        getAssetStorage(context, "", function)
+    fun getAssetStorageEqualTo(context: Context, function: (name: ArrayList<FileModel>?) -> (Unit)) {
+        getAssetStorageEqualTo(context, "", function)
     }
 
-    fun getAssetStorage(context: Context, parent: String, function: (name: ArrayList<FileModel>?) -> (Unit)) {
+    fun getAssetStorageEqualTo(context: Context, parent: String, function: (name: ArrayList<FileModel>?) -> (Unit)) {
         val itemModel = getItemModel(context)
         if (Prefs(context).FIREBASE_URL.isEmpty()) {
             Log.d("LOG", "Firebase url not found")
@@ -122,8 +122,7 @@ class FirebaseManager {
             function(null)
         } else {
             val parentUrl: String = if (parent.isEmpty()) getItemModel(context).asset_folder
-            else getItemModel(context).asset_folder + "/" + parent
-
+            else parent
             val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parentUrl + "\""
             val queue = Volley.newRequestQueue(context)
             val stringRequest = StringRequest(
@@ -142,7 +141,7 @@ class FirebaseManager {
                                 val fileModel = FileModel()
                                 if (value.has("name")) fileModel.name = value.getString("name")
                                 if (value.has("url")) fileModel.url = value.getString("url")
-                                if (value.has("thumb")) fileModel.url = value.getString("thumb")
+                                if (value.has("thumb")) fileModel.thumb = value.getString("thumb")
                                 if (value.has("size")) fileModel.size = value.getString("size")
                                 if (value.has("parent")) fileModel.parent = value.getString("parent")
                                 listFile.add(fileModel)
