@@ -98,9 +98,6 @@ class MainActivity : AppCompatActivity() {
             adsManager.showRewardedAds(this, 0)
         })
 
-        groupAdapter.add(ItemViewHolder("Reset GDPR") {
-            AdsManager().resetGDPR()
-        })
     }
 
     override fun onBackPressed() {

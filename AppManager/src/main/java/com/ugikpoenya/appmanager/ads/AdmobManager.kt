@@ -248,15 +248,14 @@ class AdmobManager {
             Log.d("LOG", "Admob Open Ads Init")
             AppOpenAd.load(
                 context, Prefs(context).ITEM_MODEL.admob_open_ads, request,
-                object : AppOpenAd.AppOpenAdLoadCallback() {
+                AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, object : AppOpenAd.AppOpenAdLoadCallback() {
                     override fun onAdLoaded(ad: AppOpenAd) {
-                        Log.d("LOG", "Admob Open Ads Loaded")
+                        Log.d("LOG","Admob Open Ads Loaded")
                         appOpenAd = ad
                         showOpenAdsAdmob(context)
                     }
-
                     override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                        Log.d("LOG", "Admob Open Ads Filed " + loadAdError.message)
+                        Log.d("LOG","Admob Open Ads Filed "+loadAdError.message)
                     }
                 }
             )
@@ -288,41 +287,4 @@ class AdmobManager {
         }
     }
 
-    fun resetGDPR() {
-        consentInformation?.reset()
-    }
-
-    // GDPR Init
-    fun initGdpr(context: Context, function: () -> (Unit)) {
-        Log.d("LOG", "Init GDPR")
-        val params = ConsentRequestParameters.Builder()
-
-
-        if (ADMOB_TEST_DEVICE_ID.size > 0) {
-            val debugSettings = ConsentDebugSettings.Builder(context)
-                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-            ADMOB_TEST_DEVICE_ID.forEach {
-                debugSettings.addTestDeviceHashedId(it)
-            }
-            params.setConsentDebugSettings(debugSettings.build())
-        }
-
-        consentInformation = UserMessagingPlatform.getConsentInformation(context)
-        consentInformation?.requestConsentInfoUpdate(context as Activity, params.build(), {
-            UserMessagingPlatform.loadAndShowConsentFormIfRequired(context) { loadAndShowError: FormError? ->
-                if (loadAndShowError != null) {
-                    Log.d("LOG", String.format("%s: %s", loadAndShowError.errorCode, loadAndShowError.message))
-                }
-
-                if (consentInformation!!.canRequestAds()) {
-                    Log.d("LOG", "GDPR canRequestAds")
-                    initAdmobAds(context)
-                }
-
-                function()
-            }
-        }, { requestConsentError: FormError ->
-            Log.d("LOG", String.format("%s: %s", requestConsentError.errorCode, requestConsentError.message))
-        })
-    }
 }
