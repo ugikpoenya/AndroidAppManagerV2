@@ -50,6 +50,10 @@ class ItemModel {
     var unity_rewarded_ads: String = ""
     var unity_test_mode: Boolean = false
 
+    //Chartboost
+    var chartboost_app_id: String = ""
+    var chartboost_app_signature: String = ""
+
     //Redirect
     var redirect_content: String =
         "Please update the application to the latest version to get additional features."

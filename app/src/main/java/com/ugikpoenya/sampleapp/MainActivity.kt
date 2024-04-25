@@ -31,14 +31,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("LOG", it.categori_id + " / " + it.categori)
         }
 
-        serverManager.getPosts(this) { posts ->
-            posts?.forEach {
-                Log.d("LOG", it.post_title.toString())
-                it.categories?.forEach { cat ->
-                    Log.d("LOG", cat.categori_id + " / " + cat.categori)
-                }
-            }
-        }
+//        serverManager.getPosts(this) { posts ->
+//            posts?.forEach {
+//                Log.d("LOG", it.post_title.toString())
+//                it.categories?.forEach { cat ->
+//                    Log.d("LOG", cat.categori_id + " / " + cat.categori)
+//                }
+//            }
+//        }
 
         serverManager.getAssetFiles(this) { files -> null }
         serverManager.getAssetFiles(this, "Islami") { files -> null }
