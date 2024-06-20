@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ugikpoenya.appmanager.AdsManager
 import com.ugikpoenya.appmanager.AppManager
+import com.ugikpoenya.appmanager.FirebaseManager
+import com.ugikpoenya.appmanager.Prefs
 import com.ugikpoenya.appmanager.ServerManager
 import com.ugikpoenya.appmanager.holder.AdsViewHolder
 import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding
@@ -20,15 +22,36 @@ class MainActivity : AppCompatActivity() {
     val appManager = AppManager()
     val adsManager = AdsManager()
     val serverManager = ServerManager()
+    val firebaseManager = FirebaseManager()
     val groupAdapter = GroupAdapter<GroupieViewHolder>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.d("LOG", "Category " + serverManager.getCategories(this).size)
+
+        //Get Category
         serverManager.getCategories(this).forEach {
             Log.d("LOG", it.categori_id + " / " + it.categori)
+        }
+
+        firebaseManager.getPosts(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
+            response?.forEach {
+                Log.d("LOG", it.key + " / " + it.post_title)
+            }
+        }
+
+        firebaseManager.getStorage(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
+            response?.files?.forEach {
+                Log.d("LOG", it.name.toString())
+            }
+
+            response?.folder?.forEach {
+                Log.d("LOG", it.key.toString())
+                it.files?.forEach { file ->
+                    Log.d("LOG", file.name.toString())
+                }
+            }
         }
 
         serverManager.getPosts(this) { posts ->
