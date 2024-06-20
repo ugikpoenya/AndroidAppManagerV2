@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.ugikpoenya.appmanager.model.FileModel
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
+import com.ugikpoenya.appmanager.model.PostResponse
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -37,29 +38,9 @@ class FirebaseManager {
                 { response ->
                     try {
                         Log.d("LOG", "getItem successfully")
-                        val json = JSONObject(response)
-                        if (json.has("item")) {
-                            val itemObject = JSONObject()
-                            val item = json.getJSONObject("item")
-                            val iter = item.keys()
-                            while (iter.hasNext()) {
-                                val key = iter.next()
-                                try {
-                                    val value = item.getJSONObject(key)
-                                    if (value.getString("is_active") == "1") {
-                                        itemObject.put(key, value.getString("value"))
-                                    }
-                                } catch (e: JSONException) {
-                                    Log.d("LOG", e.message.toString())
-                                }
-                            }
-                            val itemModel: ItemModel = Gson().fromJson(itemObject.toString(), ItemModel::class.java)
-                            Prefs(context).ITEM_MODEL = itemModel
-
-                            val itemResponse = ItemResponse()
-                            itemResponse.item = itemModel
-                            Prefs(context).ITEM_RESPONSE = Gson().toJson(itemResponse)
-                        }
+                        val itemResponse = Gson().fromJson(response, ItemResponse::class.java)
+                        Prefs(context).ITEM_RESPONSE = response
+                        Prefs(context).ITEM_MODEL = itemResponse.item
                         function(response)
                     } catch (e: Exception) {
                         Log.d("LOG", "Error : " + e.message)
