@@ -8,10 +8,14 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.ugikpoenya.appmanager.model.Category
 import com.ugikpoenya.appmanager.model.FileModel
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
+import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
+import com.ugikpoenya.appmanager.model.StorageModel
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -89,78 +93,97 @@ class FirebaseManager {
         }
     }
 
-    fun getAssetStorageEqualTo(context: Context, function: (name: ArrayList<FileModel>?) -> (Unit)) {
-        getAssetStorageEqualTo(context, "", function)
-    }
-
-    fun getAssetStorageEqualTo(context: Context, parent: String, function: (name: ArrayList<FileModel>?) -> (Unit)) {
-        val itemModel = getItemModel(context)
-        if (Prefs(context).FIREBASE_URL.isEmpty()) {
+    fun getPosts(context: Context, url: String, function: (response: ArrayList<PostModel>?) -> (Unit)) {
+        if (url.isEmpty()) {
             Log.d("LOG", "Firebase url not found")
-            function(null)
-        } else if (itemModel.asset_storage.isEmpty()) {
-            Log.d("LOG", "Asset storage not found")
-            function(null)
         } else {
-            val parentUrl: String = if (parent.isEmpty()) getItemModel(context).asset_folder
-            else parent
-            val storageUrl = Prefs(context).FIREBASE_URL + "/storage/" + itemModel.asset_storage + ".json?orderBy=\"parent\"&equalTo=\"" + parentUrl + "\""
             val queue = Volley.newRequestQueue(context)
             val stringRequest = StringRequest(
-                Request.Method.GET,
-                storageUrl,
-                { response ->
-                    Log.d("LOG", "getAssetStorage successfully")
+                Request.Method.GET, url, { response ->
                     try {
-                        val listFile: ArrayList<FileModel> = ArrayList()
+                        Log.d("LOG", "getCategories successfully")
+                        val postModelArrayList: ArrayList<PostModel> = ArrayList()
                         val json = JSONObject(response)
-                        val iter = json.keys()
+                        val posts = json.getJSONObject("posts")
+                        val iter = posts.keys()
                         while (iter.hasNext()) {
                             val key = iter.next()
                             try {
-                                val value = json.getJSONObject(key)
-                                val fileModel = FileModel()
-                                if (value.has("name")) fileModel.name = value.getString("name")
-                                if (value.has("url")) fileModel.url = value.getString("url")
-                                if (value.has("thumb")) fileModel.thumb = value.getString("thumb")
-                                if (value.has("size")) fileModel.size = value.getString("size")
-                                if (value.has("parent")) fileModel.parent = value.getString("parent")
-                                listFile.add(fileModel)
+                                val value = posts.getJSONObject(key)
+                                val postModel = PostModel()
+                                postModel.key = key
+                                if (value.has("post_title")) postModel.post_title = value.getString("post_title")
+                                if (value.has("post_content")) postModel.post_content = value.getString("post_content")
+                                if (value.has("post_video")) postModel.post_video = value.getString("post_video")
+                                if (value.has("post_audio")) postModel.post_audio = value.getString("post_audio")
+                                if (value.has("post_asset")) postModel.post_asset = value.getString("post_asset")
+                                postModelArrayList.add(postModel)
                             } catch (e: JSONException) {
                                 Log.d("LOG", e.message.toString())
                             }
                         }
-                        function(listFile)
+                        function(postModelArrayList)
                     } catch (e: Exception) {
-                        Log.d("LOG", "Error Storage: " + e.message)
+                        Log.d("LOG", "Error : " + e.message)
                         function(null)
                     }
                 }, {
-                    Log.d("LOG", "Error Storage: " + it.message.toString())
+                    Log.d("LOG", "Error : " + it.message.toString())
                     function(null)
                 })
             queue.add(stringRequest)
         }
     }
 
-    fun getJsonObject(context: Context, url: String, function: (name: JSONObject?) -> (Unit)) {
-        if (Prefs(context).FIREBASE_URL.isEmpty()) {
+
+    fun getStorage(context: Context, url: String, function: (response: StorageModel?) -> (Unit)) {
+        if (url.isEmpty()) {
             Log.d("LOG", "Firebase url not found")
-            function(null)
         } else {
-            val storageUrl = Prefs(context).FIREBASE_URL + "/" + url
             val queue = Volley.newRequestQueue(context)
             val stringRequest = StringRequest(
-                Request.Method.GET,
-                storageUrl,
-                { response ->
-                    Log.d("LOG", "getJsonObject successfully")
-                    function(JSONObject(response))
+                Request.Method.GET, url, { response ->
+                    try {
+                        Log.d("LOG", "getStorage successfully")
+                        val json = JSONObject(response)
+                        function(getStorageModel(json))
+                    } catch (e: Exception) {
+                        Log.d("LOG", "Error : " + e.message)
+                        function(null)
+                    }
                 }, {
-                    Log.d("LOG", "Error JsonObject : " + it.message.toString())
+                    Log.d("LOG", "Error : " + it.message.toString())
                     function(null)
                 })
             queue.add(stringRequest)
         }
     }
+
+    fun getStorageModel(json: JSONObject): StorageModel {
+        val storageModel = StorageModel()
+        storageModel.files = ArrayList()
+        storageModel.folder = ArrayList()
+        try {
+            val iter = json.keys()
+            while (iter.hasNext()) {
+                val key = iter.next()
+                storageModel.key = key
+                val value = json.getJSONObject(key)
+                val fileModel = FileModel()
+                if (value.has("name") && value.has("size") && value.has("path") && value.has("url")) {
+                    fileModel.name = value.getString("name")
+                    fileModel.size = value.getString("size")
+                    fileModel.path = value.getString("path")
+                    fileModel.url = value.getString("url")
+                    storageModel.files?.add(fileModel)
+                } else {
+                    storageModel.folder?.add(getStorageModel(value))
+                }
+            }
+        } catch (e: Exception) {
+            Log.d("LOG", "Error : " + e.message)
+        }
+        return storageModel
+    }
+
 }

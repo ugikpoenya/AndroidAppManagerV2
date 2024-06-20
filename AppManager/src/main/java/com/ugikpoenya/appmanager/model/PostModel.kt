@@ -6,12 +6,16 @@ import com.ugikpoenya.appmanager.R
 import java.io.Serializable
 
 class PostModel : Serializable {
+    var key: String? = null
     var id: Int? = null
     var post_id: Int? = null
     var post_date: String? = null
     var post_title: String? = null
     var post_content: String? = null
     var post_image: String? = null
+    var post_video: String? = null
+    var post_audio: String? = null
+    var post_asset: String? = null
     var post_status: String? = null
     var post_type: String? = null
     var post_parent: Int? = null
