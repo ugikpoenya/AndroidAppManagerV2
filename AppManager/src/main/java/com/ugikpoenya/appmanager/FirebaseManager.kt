@@ -146,7 +146,7 @@ class FirebaseManager {
                     try {
                         Log.d("LOG", "getStorage successfully")
                         val json = JSONObject(response)
-                        function(getStorageModel(json))
+                        function(getStorageModel(json, null))
                     } catch (e: Exception) {
                         Log.d("LOG", "Error : " + e.message)
                         function(null)
@@ -159,25 +159,27 @@ class FirebaseManager {
         }
     }
 
-    fun getStorageModel(json: JSONObject): StorageModel {
+    fun getStorageModel(json: JSONObject, folderKey: String?): StorageModel {
         val storageModel = StorageModel()
+        storageModel.key = folderKey
         storageModel.files = ArrayList()
         storageModel.folder = ArrayList()
         try {
             val iter = json.keys()
             while (iter.hasNext()) {
                 val key = iter.next()
-                storageModel.key = key
+
                 val value = json.getJSONObject(key)
                 val fileModel = FileModel()
                 if (value.has("name") && value.has("size") && value.has("path") && value.has("url")) {
+                    fileModel.key = key
                     fileModel.name = value.getString("name")
                     fileModel.size = value.getString("size")
                     fileModel.path = value.getString("path")
                     fileModel.url = value.getString("url")
                     storageModel.files?.add(fileModel)
                 } else {
-                    storageModel.folder?.add(getStorageModel(value))
+                    storageModel.folder?.add(getStorageModel(value, key))
                 }
             }
         } catch (e: Exception) {

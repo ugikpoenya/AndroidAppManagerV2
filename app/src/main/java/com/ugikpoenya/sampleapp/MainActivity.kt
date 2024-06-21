@@ -41,15 +41,31 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        Log.d("LOG_FB", Prefs(this).ITEM_MODEL.asset_url)
         firebaseManager.getStorage(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
             response?.files?.forEach {
-                Log.d("LOG", it.name.toString())
+                Log.d("LOG_FB_name", it.name.toString())
+                Log.d("LOG_FB_path", it.path.toString())
+                Log.d("LOG_FB_url", it.url.toString())
             }
 
             response?.folder?.forEach {
-                Log.d("LOG", it.key.toString())
+                Log.d("LOG_FB_FD", "----------------------------------------")
+                Log.d("LOG_FB_FD", it.key.toString())
                 it.files?.forEach { file ->
-                    Log.d("LOG", file.name.toString())
+                    Log.d("LOG_FB_name", file.name.toString())
+                    Log.d("LOG_FB_path", file.path.toString())
+                    Log.d("LOG_FB_url", file.url.toString())
+                }
+
+                it.folder?.forEach {fd->
+                    Log.d("LOG_FB_FD", "==================================")
+                    Log.d("LOG_FB_FD", fd.key.toString())
+                    fd.files?.forEach { file ->
+                        Log.d("LOG_FB_name", file.name.toString())
+                        Log.d("LOG_FB_path", file.path.toString())
+                        Log.d("LOG_FB_url", file.url.toString())
+                    }
                 }
             }
         }
