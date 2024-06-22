@@ -10,6 +10,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.ugikpoenya.appmanager.model.Category
+import com.ugikpoenya.appmanager.model.FileMetadataModel
 import com.ugikpoenya.appmanager.model.FileModel
 import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
@@ -177,6 +178,16 @@ class FirebaseManager {
                     fileModel.size = value.getString("size")
                     fileModel.path = value.getString("path")
                     fileModel.url = value.getString("url")
+                    if (value.has("metadata")) {
+                        val meta = FileMetadataModel()
+                        val metadata = value.getJSONObject("metadata")
+                        meta.id = if (metadata.has("id")) metadata.getString("id") else null
+                        meta.title = if (metadata.has("title")) metadata.getString("title") else null
+                        meta.category = if (metadata.has("category")) metadata.getString("category") else null
+                        meta.content = if (metadata.has("content")) metadata.getString("content") else null
+                        fileModel.metadata = meta
+                    }
+
                     storageModel.files?.add(fileModel)
                 } else {
                     storageModel.folder?.add(getStorageModel(value, key))

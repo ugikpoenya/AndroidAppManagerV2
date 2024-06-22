@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                 Log.d("LOG_FB_name", it.name.toString())
                 Log.d("LOG_FB_path", it.path.toString())
                 Log.d("LOG_FB_url", it.url.toString())
+                Log.d("LOG_FB_meta", it.metadata?.id.toString())
+                Log.d("LOG_FB_meta", it.metadata?.title.toString())
+                Log.d("LOG_FB_meta", it.metadata?.category.toString())
+                Log.d("LOG_FB_meta", it.metadata?.content.toString())
             }
 
             response?.folder?.forEach {
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("LOG_FB_url", file.url.toString())
                 }
 
-                it.folder?.forEach {fd->
+                it.folder?.forEach { fd ->
                     Log.d("LOG_FB_FD", "==================================")
                     Log.d("LOG_FB_FD", fd.key.toString())
                     fd.files?.forEach { file ->
