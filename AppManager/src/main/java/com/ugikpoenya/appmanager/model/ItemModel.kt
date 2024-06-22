@@ -50,6 +50,13 @@ class ItemModel {
     var unity_rewarded_ads: String = ""
     var unity_test_mode: Boolean = false
 
+    //AppLovin
+    var applovin_banner: String = ""
+    var applovin_interstitial: String = ""
+    var applovin_native: String = ""
+    var applovin_rewarded_ads: String = ""
+    var applovin_open_ads: String = ""
+
     //Redirect
     var redirect_content: String =
         "Please update the application to the latest version to get additional features."
