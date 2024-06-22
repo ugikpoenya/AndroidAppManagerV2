@@ -12,6 +12,9 @@ import com.applovin.mediation.MaxAdViewAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader
+import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.sdk.AppLovinMediationProvider
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration
@@ -111,7 +114,7 @@ class AppLovin {
         } else {
             Log.d("LOG", "Init AppLovin Interstitial ")
             interstitialAd = MaxInterstitialAd(ITEM_MODEL.applovin_interstitial, context)
-            interstitialAd?.setExtraParameter( "container_view_ads", "true" )
+            interstitialAd?.setExtraParameter("container_view_ads", "true")
             interstitialAd?.setListener(object : MaxAdListener {
                 override fun onAdLoaded(p0: MaxAd) {
                     Log.d("LOG", "AppLovin Interstitial onAdLoaded")
@@ -155,4 +158,38 @@ class AppLovin {
         }
     }
 
+    fun initAppLovinNative(context: Context, VIEW: RelativeLayout, ORDER: Int = 0, PAGE: String = "") {
+        val ITEM_MODEL = Prefs(context).ITEM_MODEL
+        if (ITEM_MODEL.applovin_native.isEmpty()) {
+            Log.d("LOG", "Facebook Native ID not set ")
+            AdsManager().initNative(context, VIEW, ORDER, PAGE)
+        } else if (VIEW.childCount == 0) {
+            var nativeAd: MaxAd? = null
+            val nativeAdLoader = MaxNativeAdLoader(ITEM_MODEL.applovin_native, context)
+            nativeAdLoader.setNativeAdListener(object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, ad: MaxAd) {
+                    // Clean up any pre-existing native ad to prevent memory leaks.
+                    if (nativeAd != null) {
+                        nativeAdLoader.destroy(nativeAd)
+                    }
+                    nativeAd = ad
+                    Log.d("LOG", "AppLovin onNativeAdLoaded")
+                    // Add ad view to view.
+                    VIEW.removeAllViews()
+                    VIEW.addView(nativeAdView)
+                }
+
+                override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
+                    Log.d("LOG", "AppLovin onNativeAdLoadFailed")
+                    VIEW.removeAllViews()
+                    AdsManager().initNative(context, VIEW, ORDER, PAGE)
+                }
+
+                override fun onNativeAdClicked(ad: MaxAd) {
+                    Log.d("LOG", "AppLovin onNativeAdLoadFailed")
+                }
+            })
+            nativeAdLoader.loadAd()
+        }
+    }
 }

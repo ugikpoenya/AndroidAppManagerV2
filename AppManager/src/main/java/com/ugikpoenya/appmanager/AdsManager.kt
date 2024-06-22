@@ -75,6 +75,7 @@ class AdsManager {
                     when {
                         array[ORDER] == ORDER_ADMOB -> AdmobManager().initAdmobNative(context, view, ORDER + 1, PAGE)
                         array[ORDER] == ORDER_FACEBOOK -> FacebookManager().initFacebookNative(context, view, ORDER + 1, PAGE)
+                        array[ORDER] == ORDER_APPLOVIN -> AppLovin().initAppLovinNative(context, view, ORDER + 1, PAGE)
                         else -> initNative(context, view, ORDER + 1, PAGE)
                     }
                 }
