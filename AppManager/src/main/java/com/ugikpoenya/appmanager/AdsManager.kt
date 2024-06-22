@@ -116,6 +116,7 @@ class AdsManager {
                 array[ORDER] == ORDER_ADMOB -> AdmobManager().showRewardedAdmob(context, ORDER + 1)
                 array[ORDER] == ORDER_FACEBOOK -> FacebookManager().showRewardedFacebook(context, ORDER + 1)
                 array[ORDER] == ORDER_UNITY -> UnityManager().showRewardedUnity(context, ORDER + 1)
+                array[ORDER] == ORDER_APPLOVIN -> AppLovin().showRewardedAppLovin(context, ORDER + 1)
                 else -> showRewardedAds(context, 0)
             }
         } else {

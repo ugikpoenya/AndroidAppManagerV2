@@ -1,5 +1,6 @@
 package com.ugikpoenya.appmanager.ads
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
@@ -10,8 +11,11 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxAdViewAdListener
 import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
 import com.applovin.mediation.ads.MaxAdView
 import com.applovin.mediation.ads.MaxInterstitialAd
+import com.applovin.mediation.ads.MaxRewardedAd
 import com.applovin.mediation.nativeAds.MaxNativeAdListener
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
@@ -24,6 +28,7 @@ import com.ugikpoenya.appmanager.intervalCounter
 
 
 private var interstitialAd: MaxInterstitialAd? = null
+private var rewardedAd: MaxRewardedAd? = null
 
 class AppLovin {
 
@@ -47,6 +52,7 @@ class AppLovin {
             AppLovinSdk.getInstance(context).initialize(initConfig) { sdkConfig ->
                 Log.d("LOG", "initAppLovinAds successfully")
                 initInterstitialAppLovin(context)
+                initRewardedAppLovin(context)
             }
         }
     }
@@ -126,6 +132,7 @@ class AppLovin {
 
                 override fun onAdHidden(p0: MaxAd) {
                     Log.d("LOG", "AppLovin Interstitial onAdHidden")
+                    interstitialAd?.loadAd()
                 }
 
                 override fun onAdClicked(p0: MaxAd) {
@@ -151,10 +158,61 @@ class AppLovin {
             interstitialAd?.showAd()
 
             intervalCounter = Prefs(context).ITEM_MODEL.interstitial_interval
-            Log.d("LOG", "Interstitial admob Show")
+            Log.d("LOG", "Interstitial AppLovin Show")
         } else {
-            Log.d("LOG", "Interstitial admob not loaded")
+            Log.d("LOG", "Interstitial AppLovin not loaded")
             AdsManager().showInterstitial(context, ORDER)
+        }
+    }
+
+    fun initRewardedAppLovin(context: Context) {
+        val ITEM_MODEL = Prefs(context).ITEM_MODEL
+        if (ITEM_MODEL.applovin_rewarded_ads.isEmpty()) {
+            Log.d("LOG", "AppLovin Rewarded ID Not set")
+        } else {
+            Log.d("LOG", "Init AppLovin Rewarded ")
+            rewardedAd = MaxRewardedAd.getInstance(ITEM_MODEL.applovin_rewarded_ads, context as Activity)
+            rewardedAd?.setListener(object : MaxRewardedAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdLoaded")
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdDisplayed")
+                }
+
+                override fun onAdHidden(p0: MaxAd) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdHidden")
+                    rewardedAd?.loadAd()
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdClicked")
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdLoadFailed")
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Log.d("LOG", "AppLovin RewardedAd onAdDisplayFailed")
+                }
+
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    Log.d("LOG", "AppLovin RewardedAd onUserRewarded")
+                }
+            })
+            rewardedAd?.loadAd()
+        }
+    }
+
+    fun showRewardedAppLovin(context: Context, ORDER: Int = 0) {
+        if (rewardedAd != null && rewardedAd!!.isReady) {
+            rewardedAd?.showAd(context as Activity)
+            Log.d("LOG", "Rewarded ID AppLovin Show")
+        } else {
+            Log.d("LOG", "Rewarded ID AppLovin not loaded")
+            AdsManager().showRewardedAds(context, ORDER)
         }
     }
 
