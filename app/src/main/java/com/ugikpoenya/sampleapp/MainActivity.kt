@@ -2,7 +2,9 @@ package com.ugikpoenya.sampleapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +15,14 @@ import com.ugikpoenya.appmanager.FirebaseManager
 import com.ugikpoenya.appmanager.Prefs
 import com.ugikpoenya.appmanager.ServerManager
 import com.ugikpoenya.appmanager.holder.AdsViewHolder
+import com.ugikpoenya.masterguidev4.DownloadCallback
+import com.ugikpoenya.masterguidev4.VolleyDownload
 import com.ugikpoenya.sampleapp.databinding.ActivityMainBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import java.io.File
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -103,6 +110,39 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         binding.recyclerView.layoutManager = listLayoutManager
         binding.recyclerView.adapter = groupAdapter
+
+        groupAdapter.add(ItemViewHolder("Download") {
+            val dirPath = Environment.getExternalStorageDirectory().path + "/" + Environment.DIRECTORY_DOWNLOADS
+            var fileDownload = "https://firebasestorage.googleapis.com/v0/b/ugikpoenya-app-manager.appspot.com/o/How%20to%20Draw%20Cinnamoroll.mp4?alt=media&token=920e07a5-2429-4858-88e8-baba547d3faa"
+            val file = File(fileDownload)
+            var filePath = URLDecoder.decode(file.name, StandardCharsets.UTF_8.toString())
+            filePath = filePath.substringBefore("?")
+            filePath = filePath.replace("/", "_")
+
+            filePath = dirPath + "/" + filePath
+
+            VolleyDownload(this, fileDownload, filePath, object : DownloadCallback {
+                override fun onProgressUpdate(progress: Int) {
+                    runOnUiThread {
+                        Log.d("LOG", "Progress ${progress}%")
+                    }
+                }
+
+                override fun onDownloadComplete(filePath: String) {
+                    runOnUiThread {
+                        Log.d("LOG", filePath)
+                        Toast.makeText(applicationContext, "Download completed!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onDownloadFailed(errorMessage: String) {
+                    runOnUiThread {
+                        Log.e("LOG", "Error: ${errorMessage}")
+                        Toast.makeText(applicationContext, "Download failed!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        })
 
         groupAdapter.add(ItemViewHolder("Posts") {
             startActivity(Intent(this, PostsActivity::class.java))
