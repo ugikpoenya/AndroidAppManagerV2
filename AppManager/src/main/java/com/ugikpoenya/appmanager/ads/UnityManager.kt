@@ -98,6 +98,7 @@ class UnityManager {
     fun showInterstitialUnity(context: Context, ORDER: Int = 0) {
         if (Prefs(context).ITEM_MODEL.unity_interstitial.isEmpty()) {
             Log.d("LOG", "Unity Interstitial ID Not set")
+            AdsManager().showInterstitial(context, ORDER)
         } else {
             Log.d("LOG", "Show Unity Ads Interstitial ")
             UnityAds.show(context as Activity, Prefs(context).ITEM_MODEL.unity_interstitial, UnityAdsShowOptions(), object : IUnityAdsShowListener {

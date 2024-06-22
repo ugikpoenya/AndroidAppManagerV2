@@ -51,6 +51,7 @@ class ItemModel {
     var unity_test_mode: Boolean = false
 
     //AppLovin
+    var applovin_sdk_key: String = ""
     var applovin_banner: String = ""
     var applovin_interstitial: String = ""
     var applovin_native: String = ""

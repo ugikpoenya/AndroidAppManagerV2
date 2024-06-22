@@ -17,7 +17,7 @@ import org.json.JSONObject
 val DEFAULT_NATIVE_START = 2
 val DEFAULT_NATIVE_INTERVAL = 8
 val DEFAULT_INTERSTITIAL_INTERVAL = 0
-var DEFAULT_PRIORITY = "0,1,2"
+var DEFAULT_PRIORITY = "0,1,2,3"
 
 class ServerManager {
     fun setBaseUrl(context: Context, base_url: String) {
