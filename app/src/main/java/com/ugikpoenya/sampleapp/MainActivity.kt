@@ -1,11 +1,15 @@
 package com.ugikpoenya.sampleapp
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.Manifest
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     val serverManager = ServerManager()
     val firebaseManager = FirebaseManager()
     val groupAdapter = GroupAdapter<GroupieViewHolder>()
+    private val PERMISSION_REQUEST_CODE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -112,6 +117,10 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.addItemDecoration(dividerItemDecoration)
         binding.recyclerView.layoutManager = listLayoutManager
         binding.recyclerView.adapter = groupAdapter
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PERMISSION_REQUEST_CODE)
+        }
 
         groupAdapter.add(ItemViewHolder("Download") {
             val dirPath = Environment.getExternalStorageDirectory().path + "/" + Environment.DIRECTORY_DOWNLOADS
@@ -196,4 +205,16 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         AdsManager().showOpenAds(this)
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Log.d("LOG", "PERMISSION_GRANTED")
+            } else {
+                // Handle permission denial
+            }
+        }
+    }
+
 }
