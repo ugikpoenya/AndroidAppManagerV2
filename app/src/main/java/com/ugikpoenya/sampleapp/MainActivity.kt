@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("LOG_FB_meta", it.metadata?.title.toString())
                 Log.d("LOG_FB_meta", it.metadata?.category.toString())
                 Log.d("LOG_FB_meta", it.metadata?.content.toString())
+                Log.d("LOG_FB_meta", it.getThumbUrl().toString())
             }
 
             response?.folder?.forEach {
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("LOG_FB_name", file.name.toString())
                     Log.d("LOG_FB_path", file.path.toString())
                     Log.d("LOG_FB_url", file.url.toString())
+                    Log.d("LOG_FB_meta", file.getThumbUrl().toString())
                 }
 
                 it.folder?.forEach { fd ->
