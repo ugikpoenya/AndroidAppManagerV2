@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.RelativeLayout
 import com.ugikpoenya.appmanager.AdsManager
 import com.ugikpoenya.appmanager.Prefs
+import com.ugikpoenya.appmanager.intervalCounter
 import com.unity3d.ads.*
 import com.unity3d.services.banners.BannerErrorInfo
 import com.unity3d.services.banners.BannerView
@@ -124,6 +125,7 @@ class UnityManager {
                     p1: UnityAds.UnityAdsShowCompletionState?,
                 ) {
                     Log.d("LOG", "Interstitial onUnityAdsShowComplete")
+                    intervalCounter = Prefs(context).ITEM_MODEL.interstitial_interval
                     initInterstitialUnity(context)
                 }
             })

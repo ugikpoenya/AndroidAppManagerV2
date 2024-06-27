@@ -87,8 +87,8 @@ class AdsManager {
     }
 
     fun showInterstitial(context: Context, ORDER: Int = 0) {
+        Log.d("LOG", "Show Interstitial $ORDER intervalCounter $intervalCounter")
         if (intervalCounter <= 0) {
-            Log.d("LOG", "Show  Interstitial $ORDER")
             var priority: String? = Prefs(context).ITEM_MODEL.interstitial_priority
             if (priority.isNullOrEmpty()) priority = DEFAULT_PRIORITY
             val array = priority.split(",").map { it.toInt() }
