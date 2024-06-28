@@ -1,5 +1,6 @@
 package com.ugikpoenya.appmanager.model
 
+import com.ugikpoenya.appmanager.tools.formatFileSize
 import java.io.Serializable
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -13,6 +14,17 @@ class FileModel : Serializable {
     var size: String? = null
     var path: String? = null
     var metadata: FileMetadataModel? = null
+
+    fun sizeFormat(): String {
+        return if (size.isNullOrEmpty()) ""
+        else {
+            try {
+                formatFileSize(size!!.toLong())
+            } catch (e: Exception) {
+                ""
+            }
+        }
+    }
 
     fun getThumbUrl(size: String? = null): String? {
         if (!this.url.isNullOrEmpty()) {

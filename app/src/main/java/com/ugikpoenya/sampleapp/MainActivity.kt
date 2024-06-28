@@ -47,9 +47,19 @@ class MainActivity : AppCompatActivity() {
             Log.d("LOG", it.categori_id + " / " + it.categori)
         }
 
-        firebaseManager.getPosts(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
-            response?.forEach {
-                Log.d("LOG", it.key + " / " + it.post_title)
+//        firebaseManager.getPosts(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
+//            response?.forEach {
+//                Log.d("LOG", it.key + " / " + it.post_title)
+//            }
+//        }
+
+        firebaseManager.getCategory(this, Prefs(this).ITEM_MODEL.asset_url) { response ->
+            println("Category: ${response?.category}")
+            println("Posts:")
+            response?.posts?.forEach {
+                println("Post Key: ${it.key}")
+                println("Post Title: ${it.post_title}")
+                println("Post Asset: ${it.post_asset}")
             }
         }
 
