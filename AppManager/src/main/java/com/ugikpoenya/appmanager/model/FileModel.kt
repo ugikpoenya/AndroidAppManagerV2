@@ -11,6 +11,7 @@ class FileModel : Serializable {
     var name: String? = null
     var url: String? = null
     var thumb: String? = null
+    var ext: String? = null
     var size: String? = null
     var path: String? = null
     var metadata: FileMetadataModel? = null

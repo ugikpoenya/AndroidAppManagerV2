@@ -12,6 +12,7 @@ import com.ugikpoenya.appmanager.model.ItemModel
 import com.ugikpoenya.appmanager.model.ItemResponse
 import com.ugikpoenya.appmanager.model.PostModel
 import com.ugikpoenya.appmanager.model.PostResponse
+import com.ugikpoenya.appmanager.model.StorageModel
 import org.json.JSONObject
 
 val DEFAULT_NATIVE_START = 2
@@ -199,5 +200,32 @@ class ServerManager {
             Log.d("LOG", "getFolder $folder:  " + it?.files?.size + "/" + it?.folders?.size)
             function(it?.files, it?.folders)
         }
+    }
+
+    fun getStorage(context: Context, function: (storageModel: StorageModel?) -> (Unit)) {
+        Log.d("LOG", "getStorage "+Prefs(context).BASE_URL + "storage")
+        val queue = Volley.newRequestQueue(context)
+        val stringRequest = object : StringRequest(Method.GET, Prefs(context).BASE_URL + "storage", com.android.volley.Response.Listener { response ->
+            try {
+                val storageModel = Gson().fromJson(response, StorageModel::class.java)
+                Log.d("LOG", "getStorage files "+storageModel.files?.size.toString())
+                Log.d("LOG", "getStorage folder "+storageModel.folders?.size.toString())
+                function(storageModel)
+            } catch (e: Exception) {
+                Log.d("LOG", "Error : " + e.message)
+                function(null)
+            }
+        }, com.android.volley.Response.ErrorListener {
+            Log.d("LOG", "Error : " + it.message)
+            function(null)
+        }) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["package_name"] = context.packageName
+                headers["api_key"] = Prefs(context).API_KEY
+                return headers
+            }
+        }
+        queue.add(stringRequest)
     }
 }

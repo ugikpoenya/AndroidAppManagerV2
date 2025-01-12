@@ -13,6 +13,7 @@ class PostModel : Serializable {
     var post_title: String? = null
     var post_content: String? = null
     var post_image: String? = null
+    var post_thumb: String? = null
     var post_video: String? = null
     var post_audio: String? = null
     var post_asset: String? = null
