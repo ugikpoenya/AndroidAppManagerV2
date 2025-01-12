@@ -66,20 +66,13 @@ class ServerManager {
         }
     }
 
-    fun getCategories(context: Context): ArrayList<Category> {
-        val categoryList = ArrayList<Category>()
+    fun getCategories(context: Context): ArrayList<Category> ?{
         return try {
             val itemResponse = Gson().fromJson(Prefs(context).ITEM_RESPONSE, ItemResponse::class.java)
-            val itr = itemResponse.categories?.iterator()
-            if (itr != null) {
-                while (itr.hasNext()) {
-                    categoryList.add(itr.next().value)
-                }
-            }
-            categoryList
+            itemResponse.categories
         } catch (e: Exception) {
             Log.d("LOG", "Error : " + e.message)
-            categoryList
+            null
         }
     }
 

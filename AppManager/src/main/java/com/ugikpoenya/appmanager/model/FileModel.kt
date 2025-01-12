@@ -14,7 +14,6 @@ class FileModel : Serializable {
     var ext: String? = null
     var size: String? = null
     var path: String? = null
-    var metadata: FileMetadataModel? = null
 
     fun sizeFormat(): String {
         return if (size.isNullOrEmpty()) ""

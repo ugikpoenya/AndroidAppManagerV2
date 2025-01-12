@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         ServerManager serverManager = new ServerManager();
-        serverManager.setBaseUrl(this, "https://master.ugikpoenya.net/api/");
+        serverManager.setBaseUrl(this, "https://firestore-cms.ugikpoenya.net/api/");
         serverManager.setApiKey(this, "DA8BB129F7C1ED5BD07046961C995A77");
 
         new AdmobManager().addTestDeviceId("408B66CD374D7D5E90132B65146233B2");

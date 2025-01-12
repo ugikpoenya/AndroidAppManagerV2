@@ -9,6 +9,7 @@ class PostModel : Serializable {
     var key: String? = null
     var id: Int? = null
     var post_id: Int? = null
+    var post_key: String? = null
     var post_date: String? = null
     var post_title: String? = null
     var post_content: String? = null
